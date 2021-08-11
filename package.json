@@ -18,7 +18,7 @@
     "format": "prettier --write \"./src/**/*.ts\"",
     "lint:fix": "eslint \"./src/**/*.ts\" --fix",
     "lint": "eslint \"./src/**/*.ts\"",
-    "postinstall": "husky install",
+    "prepare": "husky install",
     "test": "jest"
   },
   "dependencies": {
