@@ -1,0 +1,81 @@
+{
+  "env": {
+    "jest": true,
+    "node": true
+  },
+  "extends": ["plugin:@typescript-eslint/recommended", "prettier", "plugin:prettier/recommended"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "tsconfig.json",
+    "sourceType": "module"
+  },
+  "plugins": ["import", "@typescript-eslint/eslint-plugin"],
+  "root": true,
+  "rules": {
+    "@typescript-eslint/interface-name-prefix": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/member-ordering": [
+      "warn",
+      {
+        "default": {
+          "memberTypes": [
+            "private-static-field",
+            "public-static-field",
+            "private-instance-field",
+            "public-instance-field",
+            "private-constructor",
+            "public-constructor",
+            "private-instance-method",
+            "protected-instance-method",
+            "public-instance-method"
+          ]
+        }
+      }
+    ],
+    "@typescript-eslint/no-empty-interface": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "arrow-parens": ["error", "always"],
+    "import/order": [
+      "warn",
+      {
+        "alphabetize": {
+          "caseInsensitive": true,
+          "order": "asc"
+        },
+        "groups": [["builtin", "external"], "internal", "parent", "sibling", "index"],
+        "newlines-between": "always",
+        "pathGroupsExcludedImportTypes": []
+      }
+    ],
+    "import/prefer-default-export": "off",
+    "max-classes-per-file": ["error", 1],
+    "max-len": ["error", 120],
+    "no-console": "error",
+    "no-empty-pattern": "warn",
+    "no-return-await": "error",
+    "no-trailing-spaces": "error",
+    "object-shorthand": "error",
+    "padding-line-between-statements": [
+      "error",
+      { "blankLine": "always", "next": "*", "prev": ["const", "let"] },
+      { "blankLine": "always", "next": "class", "prev": "*" },
+      { "blankLine": "always", "next": "export", "prev": "*" },
+      { "blankLine": "any", "next": "export", "prev": "export" },
+      { "blankLine": "always", "next": "for", "prev": "*" },
+      { "blankLine": "always", "next": "function", "prev": "*" },
+      { "blankLine": "always", "next": "if", "prev": "*" },
+      { "blankLine": "always", "next": "return", "prev": "*" },
+      { "blankLine": "always", "next": "switch", "prev": "*" },
+      { "blankLine": "always", "next": "try", "prev": "*" },
+      { "blankLine": "always", "next": "while", "prev": "*" },
+      { "blankLine": "any", "next": ["const", "let"], "prev": ["const", "let"] }
+    ],
+    "sort-keys": ["error", "asc", { "caseSensitive": false }]
+  },
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
+  }
+}
