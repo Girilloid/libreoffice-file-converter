@@ -1,6 +1,6 @@
 # libreoffice-file-converter
 
-Simple NodeJS wrapper for libreoffice CLI for converting office documents to differrent formats.
+Simple NodeJS wrapper for libreoffice CLI for converting office documents to different formats.
 
 ## Dependency
 
