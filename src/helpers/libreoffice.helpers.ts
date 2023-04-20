@@ -20,8 +20,8 @@ export const getPaths = (): string[] => {
   throw new Error(`Operating system not yet supported: ${process.platform}`);
 };
 
-export const getLibreOfficePath = async (): Promise<string> => {
-  const paths = getPaths();
+export const getLibreOfficePath = async (binaryPaths: string[]): Promise<string> => {
+  const paths = [...binaryPaths, ...getPaths()];
 
   const existingPaths = await Promise.all(
     paths.map(async (path) => {
@@ -56,7 +56,7 @@ export const getLibreOfficeCommand = (
     command = `${command}:"${filter}"`;
   }
 
-  command = `${command}  --outdir ${temporaryDir} ${join(temporaryDir, 'source')}`;
+  command = `${command} --outdir ${temporaryDir} ${join(temporaryDir, 'source')}`;
 
   return command.split(' ');
 };

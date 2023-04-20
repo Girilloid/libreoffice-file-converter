@@ -7,13 +7,16 @@ import { dirAsync } from './helpers/tmp.helpers';
 import { LibreOfficeFileConverterOptions } from './libreoffice-file-converter-options.interface';
 
 export class LibreOfficeFileConverter {
+  private readonly _binaryPaths: LibreOfficeFileConverterOptions['binaryPaths'];
+
   private readonly _childProcessOptions: LibreOfficeFileConverterOptions['childProcessOptions'];
 
   private readonly _tmpOptions: LibreOfficeFileConverterOptions['tmpOptions'];
 
   constructor(options: LibreOfficeFileConverterOptions = {}) {
-    const { childProcessOptions, tmpOptions } = options;
+    const { binaryPaths = [], childProcessOptions, tmpOptions } = options;
 
+    this._binaryPaths = binaryPaths;
     this._childProcessOptions = childProcessOptions;
     this._tmpOptions = tmpOptions;
   }
@@ -23,7 +26,7 @@ export class LibreOfficeFileConverter {
   };
 
   public async convert(file: Buffer, format: string, filter?: string): Promise<Buffer> {
-    const libreOfficePath = await getLibreOfficePath();
+    const libreOfficePath = await getLibreOfficePath(this._binaryPaths);
 
     const temporaryDir = await dirAsync({
       prefix: 'libreoffice-file-converter',
