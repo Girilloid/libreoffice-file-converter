@@ -1,7 +1,7 @@
 {
   "name": "libreoffice-file-converter",
   "version": "1.0.1",
-  "description": "Simple NodeJS wrapper for libreoffice CLI for converting office documents to differrent formats",
+  "description": "Simple NodeJS wrapper for libreoffice CLI for converting office documents to different formats",
   "keywords": [
     "LibreOffice",
     "convert"
@@ -25,27 +25,27 @@
     "tmp": "^0.2.1"
   },
   "devDependencies": {
-    "@commitlint/cli": "^13.1.0",
-    "@commitlint/config-conventional": "^13.1.0",
-    "@types/eslint": "^7.28.0",
+    "@commitlint/cli": "^17.6.1",
+    "@commitlint/config-conventional": "^17.6.1",
+    "@types/eslint": "^8.37.0",
     "@types/eslint-plugin-prettier": "^3.1.0",
-    "@types/jest": "^27.0.0",
-    "@types/node": "^16.4.13",
+    "@types/jest": "^29.5.1",
+    "@types/node": "^18.15.11",
     "@types/prettier": "^2.3.2",
     "@types/tmp": "^0.2.1",
-    "@typescript-eslint/eslint-plugin": "^4.29.1",
-    "@typescript-eslint/parser": "^4.29.1",
-    "eslint": "^7.32.0",
+    "@typescript-eslint/eslint-plugin": "^5.59.0 ",
+    "@typescript-eslint/parser": "^5.59.0 ",
+    "eslint": "^8.38.0",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-import-resolver-typescript": "^2.4.0",
+    "eslint-import-resolver-typescript": "^3.5.5",
     "eslint-plugin-import": "^2.24.0",
-    "eslint-plugin-prettier": "^3.4.0",
-    "husky": "^7.0.1",
-    "jest": "^27.0.6",
-    "lint-staged": "^11.1.2",
+    "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^8.0.3",
+    "jest": "^29.5.0",
+    "lint-staged": "^13.2.1",
     "prettier": "^2.3.2",
-    "rimraf": "^3.0.2",
-    "ts-jest": "^27.0.4",
-    "typescript": "^4.3.5"
+    "rimraf": "^5.0.0",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.0.4"
   }
 }
