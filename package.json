@@ -8,11 +8,16 @@
   ],
   "repository": "https://github.com/Girilloid/libreoffice-file-converter",
   "license": "MIT",
-  "main": "./dist/index.js",
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
+  "exports": {
+    "import": "./dist/index.mjs",
+    "require": "./dist/index.js"
+  },
   "scripts": {
     "build": "tsup",
     "format": "prettier --write \"./src/**/*.ts\"",
