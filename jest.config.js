@@ -1,6 +1,7 @@
 module.exports = {
-  collectCoverageFrom: ['**/*.(t|j)s'],
-  coverageDirectory: 'coverage',
+  collectCoverageFrom: ['<rootDir>/src/**/*.{js,jsx,ts,tsx}'],
+  coverageDirectory: '<rootDir>/coverage',
+  coverageReporters: ['lcov', 'clover', 'text-summary'],
   moduleFileExtensions: ['js', 'json', 'ts'],
   preset: 'ts-jest',
   testEnvironment: 'node',

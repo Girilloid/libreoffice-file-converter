@@ -1,18 +1,55 @@
+import { access as fsAccess, mkdir, readdir, unlink } from 'fs/promises';
 import { join } from 'path';
 
 import { LibreOfficeFileConverter } from '../src';
 import { readFileAsync, writeFileAsync } from '../src/helpers/fs.helpers';
 
-const getResourcesPath = (fileName: string): string => {
+const access = async (path: string): Promise<boolean> => {
+  try {
+    await fsAccess(path);
+
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+const clearDir = async (path): Promise<void> => {
+  const files = await readdir(path);
+
+  await Promise.all(
+    files.map((file) => {
+      return unlink(join(path, file));
+    }),
+  );
+};
+
+const getInputPath = (fileName: string): string => {
   return join(__dirname, '/resources', fileName);
 };
 
+const getOutputPath = (fileName: string): string => {
+  return join(__dirname, '/resources/output', fileName);
+};
+
+const outputDir = getOutputPath('');
+const outputFormat = 'pdf';
 const timeout = 10 * 1000;
+
+const formats = ['doc', 'docx', 'gif', 'jpg', 'odp', 'ods', 'odt', 'png', 'ppt', 'rtf', 'xls', 'xlsx'];
 
 describe('LibreOfficeFileConverter', () => {
   let libreOfficeFileConverter: LibreOfficeFileConverter;
 
-  beforeAll(() => {
+  beforeAll(async () => {
+    const isExists = await access(outputDir);
+
+    if (!isExists) {
+      await mkdir(outputDir);
+    } else {
+      await clearDir(outputDir);
+    }
+
     libreOfficeFileConverter = new LibreOfficeFileConverter({
       childProcessOptions: {
         timeout,
@@ -20,197 +57,59 @@ describe('LibreOfficeFileConverter', () => {
     });
   });
 
-  describe('convert to pdf', () => {
-    const format = 'pdf';
+  afterEach(async () => {
+    await clearDir(outputDir);
+  });
 
-    it('Should convert doc file', async () => {
-      let exception;
+  describe('convertBuffer()', () => {
+    formats.map((format) => {
+      const inputFileName = `example.${format}`;
+      const outputFileName = `example-${format}.${outputFormat}`;
 
-      try {
-        const inputPath = getResourcesPath('example.doc');
-        const outputPath = getResourcesPath('example-doc.pdf');
+      return it(`Should convert ${format} file to ${outputFormat}`, async (): Promise<void> => {
+        let exception;
 
-        const buffer = await readFileAsync(inputPath);
+        try {
+          const inputPath = getInputPath(inputFileName);
+          const outputPath = getOutputPath(outputFileName);
 
-        const resultBuffer = await libreOfficeFileConverter.convert(buffer, format);
+          const buffer = await readFileAsync(inputPath);
 
-        await writeFileAsync(outputPath, resultBuffer);
-      } catch (error) {
-        exception = error;
-      }
+          const resultBuffer = await libreOfficeFileConverter.convert(buffer, outputFormat);
 
-      expect(exception).toBe(undefined);
+          await writeFileAsync(outputPath, resultBuffer);
+        } catch (error) {
+          exception = error;
+        }
+
+        expect(exception).toBe(undefined);
+      });
     });
+  });
 
-    it('Should convert docx file', async () => {
-      let exception;
+  describe('convertFile()', () => {
+    formats.map((format) => {
+      const inputFileName = `example.${format}`;
 
-      try {
-        const inputPath = getResourcesPath('example.docx');
-        const outputPath = getResourcesPath('example-docx.pdf');
+      return it(`Should convert ${format} file to ${outputFormat}`, async (): Promise<void> => {
+        let exception;
 
-        const buffer = await readFileAsync(inputPath);
+        try {
+          const inputPath = getInputPath(inputFileName);
 
-        const resultBuffer = await libreOfficeFileConverter.convert(buffer, format);
+          await libreOfficeFileConverter.convertFile(inputPath, outputDir, outputFormat);
 
-        await writeFileAsync(outputPath, resultBuffer);
-      } catch (error) {
-        exception = error;
-      }
+          const outputPath = getOutputPath(`example.${outputFormat}`);
 
-      expect(exception).toBe(undefined);
-    });
+          const isExists = await access(outputPath);
 
-    it('Should convert odp file', async () => {
-      let exception;
+          expect(isExists).toBe(true);
+        } catch (error) {
+          exception = error;
+        }
 
-      try {
-        const inputPath = getResourcesPath('example.odp');
-        const outputPath = getResourcesPath('example-odp.pdf');
-
-        const buffer = await readFileAsync(inputPath);
-
-        const resultBuffer = await libreOfficeFileConverter.convert(buffer, format);
-
-        await writeFileAsync(outputPath, resultBuffer);
-      } catch (error) {
-        exception = error;
-      }
-
-      expect(exception).toBe(undefined);
-    });
-
-    it('Should convert odt file', async () => {
-      let exception;
-
-      try {
-        const inputPath = getResourcesPath('example.odt');
-        const outputPath = getResourcesPath('example-odt.pdf');
-
-        const buffer = await readFileAsync(inputPath);
-
-        const resultBuffer = await libreOfficeFileConverter.convert(buffer, format);
-
-        await writeFileAsync(outputPath, resultBuffer);
-      } catch (error) {
-        exception = error;
-      }
-
-      expect(exception).toBe(undefined);
-    });
-
-    it('Should convert ppt file', async () => {
-      let exception;
-
-      try {
-        const inputPath = getResourcesPath('example.ppt');
-        const outputPath = getResourcesPath('example-ppt.pdf');
-
-        const buffer = await readFileAsync(inputPath);
-
-        const resultBuffer = await libreOfficeFileConverter.convert(buffer, format);
-
-        await writeFileAsync(outputPath, resultBuffer);
-      } catch (error) {
-        exception = error;
-      }
-
-      expect(exception).toBe(undefined);
-    });
-
-    it('Should convert xls file', async () => {
-      let exception;
-
-      try {
-        const inputPath = getResourcesPath('example.xls');
-        const outputPath = getResourcesPath('example-xls.pdf');
-
-        const buffer = await readFileAsync(inputPath);
-
-        const resultBuffer = await libreOfficeFileConverter.convert(buffer, format);
-
-        await writeFileAsync(outputPath, resultBuffer);
-      } catch (error) {
-        exception = error;
-      }
-
-      expect(exception).toBe(undefined);
-    });
-
-    it('Should convert xlsx file', async () => {
-      let exception;
-
-      try {
-        const inputPath = getResourcesPath('example.xlsx');
-        const outputPath = getResourcesPath('example-xlsx.pdf');
-
-        const buffer = await readFileAsync(inputPath);
-
-        const resultBuffer = await libreOfficeFileConverter.convert(buffer, format);
-
-        await writeFileAsync(outputPath, resultBuffer);
-      } catch (error) {
-        exception = error;
-      }
-
-      expect(exception).toBe(undefined);
-    });
-
-    it('Should convert jpg file', async () => {
-      let exception;
-
-      try {
-        const inputPath = getResourcesPath('example.jpg');
-        const outputPath = getResourcesPath('example-jpg.pdf');
-
-        const buffer = await readFileAsync(inputPath);
-
-        const resultBuffer = await libreOfficeFileConverter.convert(buffer, format);
-
-        await writeFileAsync(outputPath, resultBuffer);
-      } catch (error) {
-        exception = error;
-      }
-
-      expect(exception).toBe(undefined);
-    });
-
-    it('Should convert png file', async () => {
-      let exception;
-
-      try {
-        const inputPath = getResourcesPath('example.png');
-        const outputPath = getResourcesPath('example-png.pdf');
-
-        const buffer = await readFileAsync(inputPath);
-
-        const resultBuffer = await libreOfficeFileConverter.convert(buffer, format);
-
-        await writeFileAsync(outputPath, resultBuffer);
-      } catch (error) {
-        exception = error;
-      }
-
-      expect(exception).toBe(undefined);
-    });
-
-    it('Should convert gif file', async () => {
-      let exception;
-
-      try {
-        const inputPath = getResourcesPath('example.gif');
-        const outputPath = getResourcesPath('example-gif.pdf');
-
-        const buffer = await readFileAsync(inputPath);
-
-        const resultBuffer = await libreOfficeFileConverter.convert(buffer, format);
-
-        await writeFileAsync(outputPath, resultBuffer);
-      } catch (error) {
-        exception = error;
-      }
-
-      expect(exception).toBe(undefined);
+        expect(exception).toBe(undefined);
+      });
     });
   });
 });

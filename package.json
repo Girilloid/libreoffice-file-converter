@@ -25,7 +25,8 @@
     "lint": "eslint \"./src/**/*.ts\"",
     "prepare": "husky install",
     "release": "standard-version --no-verify",
-    "test": "jest"
+    "test": "jest",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "tmp": "^0.2.1"
