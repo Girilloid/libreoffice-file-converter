@@ -26,15 +26,12 @@ export class LibreOfficeFileConverter {
   };
 
   public async convert(file: Buffer, format: string, filter?: string): Promise<Buffer> {
-    const libreOfficePath = await getLibreOfficePath(this._binaryPaths);
+    return this.convertBuffer(file, format, filter);
+  }
 
+  public async convertBuffer(file: Buffer, format: string, filter?: string): Promise<Buffer> {
     const temporaryDir = await dirAsync({
       prefix: 'libreoffice-file-converter',
-      unsafeCleanup: true,
-      ...this._tmpOptions,
-    });
-    const installationDir = await dirAsync({
-      prefix: 'soffice',
       unsafeCleanup: true,
       ...this._tmpOptions,
     });
@@ -43,15 +40,28 @@ export class LibreOfficeFileConverter {
 
     await writeFileAsync(temporaryFilePath, file);
 
-    const libreOfficeCommand = getLibreOfficeCommand(temporaryDir.name, installationDir.name, format, filter);
-
-    await execFileAsync(libreOfficePath, libreOfficeCommand, this._childProcessOptions);
+    await this.convertFile(temporaryFilePath, temporaryDir.name, format, filter);
 
     const result = await readFileAsync(`${temporaryFilePath}.${format}`);
 
-    installationDir.removeCallback();
     temporaryDir.removeCallback();
 
     return result;
+  }
+
+  public async convertFile(inputPath: string, outputDir: string, format: string, filter?: string): Promise<void> {
+    const libreOfficePath = await getLibreOfficePath(this._binaryPaths);
+
+    const installationDir = await dirAsync({
+      prefix: 'soffice',
+      unsafeCleanup: true,
+      ...this._tmpOptions,
+    });
+
+    const libreOfficeCommand = getLibreOfficeCommand(installationDir.name, inputPath, outputDir, format, filter);
+
+    await execFileAsync(libreOfficePath, libreOfficeCommand, this._childProcessOptions);
+
+    installationDir.removeCallback();
   }
 }

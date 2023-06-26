@@ -1,5 +1,3 @@
-import { join } from 'path';
-
 import { DARWIN_PATHS, LINUX_PATHS, WIN32_PATHS } from '../constants/paths';
 
 import { accessAsync } from './fs.helpers';
@@ -45,8 +43,9 @@ export const getLibreOfficePath = async (binaryPaths: string[]): Promise<string>
 };
 
 export const getLibreOfficeCommand = (
-  temporaryDir: string,
   installationDir: string,
+  inputPath: string,
+  outputDir: string,
   format: string,
   filter?: string,
 ): string[] => {
@@ -56,7 +55,7 @@ export const getLibreOfficeCommand = (
     command = `${command}:"${filter}"`;
   }
 
-  command = `${command} --outdir ${temporaryDir} ${join(temporaryDir, 'source')}`;
+  command = `${command} --outdir ${outputDir} ${inputPath}`;
 
   return command.split(' ');
 };
