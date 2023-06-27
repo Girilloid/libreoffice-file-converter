@@ -1,8 +1,8 @@
 import { access as fsAccess, mkdir, readdir, unlink } from 'fs/promises';
 import { join } from 'path';
 
-import { LibreOfficeFileConverter } from '../src';
 import { readFileAsync, writeFileAsync } from '../src/helpers/fs.helpers';
+import { LibreOfficeFileConverter } from '../src/libreoffice-file-converter';
 
 const access = async (path: string): Promise<boolean> => {
   try {
@@ -61,7 +61,7 @@ describe('LibreOfficeFileConverter', () => {
     await clearDir(outputDir);
   });
 
-  describe('convertBuffer()', () => {
+  describe('convert()', () => {
     formats.map((format) => {
       const inputFileName = `example.${format}`;
       const outputFileName = `example-${format}.${outputFormat}`;
@@ -76,6 +76,32 @@ describe('LibreOfficeFileConverter', () => {
           const buffer = await readFileAsync(inputPath);
 
           const resultBuffer = await libreOfficeFileConverter.convert(buffer, outputFormat);
+
+          await writeFileAsync(outputPath, resultBuffer);
+        } catch (error) {
+          exception = error;
+        }
+
+        expect(exception).toBe(undefined);
+      });
+    });
+  });
+
+  describe('convertBuffer()', () => {
+    formats.map((format) => {
+      const inputFileName = `example.${format}`;
+      const outputFileName = `example-${format}.${outputFormat}`;
+
+      return it(`Should convert ${format} file to ${outputFormat}`, async (): Promise<void> => {
+        let exception;
+
+        try {
+          const inputPath = getInputPath(inputFileName);
+          const outputPath = getOutputPath(outputFileName);
+
+          const buffer = await readFileAsync(inputPath);
+
+          const resultBuffer = await libreOfficeFileConverter.convertBuffer(buffer, outputFormat);
 
           await writeFileAsync(outputPath, resultBuffer);
         } catch (error) {
