@@ -1,4 +1,5 @@
-import { dir, DirOptions, DirResult } from 'tmp';
+import { dir } from 'tmp';
+import type { DirOptions, DirResult } from 'tmp';
 
 export const dirAsync = (options: DirOptions): Promise<DirResult> => {
   return new Promise((resolve, reject) => {

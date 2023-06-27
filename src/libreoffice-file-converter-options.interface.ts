@@ -1,5 +1,5 @@
-import { ExecFileOptions } from 'child_process';
-import { DirOptions } from 'tmp';
+import type { ExecFileOptions } from 'child_process';
+import type { DirOptions } from 'tmp';
 
 export interface LibreOfficeFileConverterOptions {
   binaryPaths?: string[];
