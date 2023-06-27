@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup LibreOffice
-        run: apt update && apt install libreoffice -y
+        run: sudo apt update && sudo apt install libreoffice -y
 
       - name: Setup NodeJS
         uses: actions/setup-node@v3
