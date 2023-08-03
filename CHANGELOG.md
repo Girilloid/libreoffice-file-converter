@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/Girilloid/libreoffice-file-converter/compare/v1.1.1...v1.2.0) (2023-08-03)
+
+
+### Features
+
+* Convert streams ([56d8f02](https://github.com/Girilloid/libreoffice-file-converter/commit/56d8f02d6b2f0b40423953e0321140067a9e4423))
+
 ### [1.1.1](https://github.com/Girilloid/libreoffice-file-converter/compare/v1.1.0...v1.1.1) (2023-06-27)
 
 ## [1.1.0](https://github.com/Girilloid/libreoffice-file-converter/compare/v1.0.5...v1.1.0) (2023-06-26)
