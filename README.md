@@ -6,7 +6,29 @@ Simple NodeJS wrapper for libreoffice CLI for converting office documents to dif
 
 Please install libreoffice in /Applications (Mac), with your favorite package manager (Linux), or with the msi (Windows).
 
-## Usage example
+## How to use
+
+### Constructor
+
+`LibreOfficeFileConverter` constructor accepts optional configuration object.
+
+#### `options.binaryPaths`
+
+Array of paths to LibreOffice binary executables.
+
+#### `options.childProcessOptions`
+
+`child_process.ExecFileOptions` object. Can be used to configure such things as timeout, etc.
+
+#### `options.tmpOptions`
+
+`tmp.DirOptions` object. Can be used to configure behavior of `tmp` package, which is used to create temporary folders for LibreOffice data.
+
+### `LibreOfficeFileConverter.convert`
+
+This method is *deprecated*, please use `convertBuffer` instead.
+
+Converts the provided file Buffer to the requested format.
 
 ```typescript
 import { readFile, writeFile } from 'fs/promises';
@@ -16,7 +38,7 @@ import { LibreOfficeFileConverter } from 'libreoffice-file-converter';
 const inputPath = join(__dirname, './resources/example.doc');
 const outputPath = join(__dirname, './resources/result.pdf');
 
-const convertFile = async () => {
+const run = async () => {
   const libreOfficeFileConverter = new LibreOfficeFileConverter({
     childProcessOptions: {
       timeout: 60 * 1000,
@@ -30,5 +52,82 @@ const convertFile = async () => {
   await writeFile(outputPath, result);
 };
 
-convertFile();
+run();
+```
+
+### `LibreOfficeFileConverter.convertBuffer`
+
+Converts the provided file Buffer to the requested format.
+
+```typescript
+import { readFile } from 'fs/promises';
+import { join } from 'path';
+import { LibreOfficeFileConverter } from 'libreoffice-file-converter';
+
+const inputPath = join(__dirname, './resources/example.doc');
+const outputPath = join(__dirname, './resources/result.pdf');
+
+const run = async () => {
+  const libreOfficeFileConverter = new LibreOfficeFileConverter({
+    childProcessOptions: {
+      timeout: 60 * 1000,
+    },
+  });
+
+  const buffer = await readFile(inputPath);
+
+  const result = await libreOfficeFileConverter.convertBuffer(buffer, 'pdf');
+};
+
+run();
+```
+
+### `LibreOfficeFileConverter.convertFile`
+
+Converts the provided file to the requested format.
+
+```typescript
+import { join } from 'path';
+import { LibreOfficeFileConverter } from 'libreoffice-file-converter';
+
+const inputPath = join(__dirname, './resources/example.doc');
+const outputDir = join(__dirname, './resources');
+
+const run = async () => {
+  const libreOfficeFileConverter = new LibreOfficeFileConverter({
+    childProcessOptions: {
+      timeout: 60 * 1000,
+    },
+  });
+
+  await libreOfficeFileConverter.convertFile(inputPath, outputDir, 'pdf'); // output path is `./resources/example.pdf`
+};
+
+run();
+```
+
+### `LibreOfficeFileConverter.convertStream`
+
+Converts the provided readable stream to the requested format.
+
+```typescript
+import { createReadStream } from 'fs';
+import { join } from 'path';
+import { LibreOfficeFileConverter } from 'libreoffice-file-converter';
+
+const inputPath = join(__dirname, './resources/example.doc');
+
+const run = async () => {
+  const libreOfficeFileConverter = new LibreOfficeFileConverter({
+    childProcessOptions: {
+      timeout: 60 * 1000,
+    },
+  });
+
+  const inputStream = createReadStream(inputPath);
+
+  const outputStream = await libreOfficeFileConverter.convertStream(inputStream, 'pdf');
+};
+
+run();
 ```

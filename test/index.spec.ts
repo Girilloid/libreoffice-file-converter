@@ -63,7 +63,7 @@ describe('LibreOfficeFileConverter', () => {
   });
 
   describe('convert()', () => {
-    formats.map((format) => {
+    formats.forEach((format) => {
       const inputFileName = `example.${format}`;
       const outputFileName = `example-${format}.${outputFormat}`;
 
@@ -89,7 +89,7 @@ describe('LibreOfficeFileConverter', () => {
   });
 
   describe('convertBuffer()', () => {
-    formats.map((format) => {
+    formats.forEach((format) => {
       const inputFileName = `example.${format}`;
       const outputFileName = `example-${format}.${outputFormat}`;
 
@@ -115,7 +115,7 @@ describe('LibreOfficeFileConverter', () => {
   });
 
   describe('convertFile()', () => {
-    formats.map((format) => {
+    formats.forEach((format) => {
       const inputFileName = `example.${format}`;
 
       return it(`Should convert ${format} file to ${outputFormat}`, async (): Promise<void> => {
@@ -141,7 +141,7 @@ describe('LibreOfficeFileConverter', () => {
   });
 
   describe('convertStream()', () => {
-    formats.map((format) => {
+    formats.forEach((format) => {
       const inputFileName = `example.${format}`;
       const outputFileName = `example-${format}.${outputFormat}`;
 
