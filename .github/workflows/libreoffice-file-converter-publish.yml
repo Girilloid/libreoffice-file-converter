@@ -19,7 +19,6 @@ jobs:
       - name: Setup NodeJS
         uses: actions/setup-node@v3
         with:
-          always-auth: true
           cache: yarn
           node-version: 18.16.*
 
@@ -30,6 +29,6 @@ jobs:
         run: yarn build
 
       - name: Publish package
-        run: yarn publish
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
