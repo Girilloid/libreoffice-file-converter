@@ -19,6 +19,7 @@ jobs:
       - name: Setup NodeJS
         uses: actions/setup-node@v3
         with:
+          always-auth: true
           cache: yarn
           node-version: 18.16.*
 
