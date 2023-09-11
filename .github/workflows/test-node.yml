@@ -1,26 +1,30 @@
-name: libreoffice-file-converter publish
+name: Test libreoffice-file-converter with NodeJS
 
 on:
   push:
-    tags:
-      - '*'
+    branches:
+      - main
+  pull_request:
 
 jobs:
-  test:
-    uses: ./.github/workflows/libreoffice-file-converter-base.yml
-
-  publish:
+  test-node:
     runs-on: ubuntu-latest
-    needs: test
+    strategy:
+      matrix:
+        version: [14.21.*, 16.*, 18.*, 20.*]
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
+      - name: Setup LibreOffice
+        uses: ./.github/actions/setup-libreoffice
 
       - name: Setup NodeJS
         uses: actions/setup-node@v3
         with:
           cache: yarn
-          node-version: 18.16.*
+          node-version: ${{ matrix.version }}
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile --non-interactive
@@ -28,7 +32,5 @@ jobs:
       - name: Build package
         run: yarn build
 
-      - name: Publish package
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Test package
+        run: yarn test

@@ -1,0 +1,32 @@
+name: Test libreoffice-file-converter with Bun
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test-bun:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup LibreOffice
+        uses: ./.github/actions/setup-libreoffice
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: 1.*
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build package
+        run: echo 'tsup is not yet supported by Bun'
+
+      - name: Test package
+        run: bun test
