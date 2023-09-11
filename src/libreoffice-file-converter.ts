@@ -2,11 +2,11 @@ import { createReadStream } from 'node:fs';
 import { readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import type { Readable } from 'node:stream';
+import { dir, setGracefulCleanup } from 'tmp-promise';
 
 import { execFileAsync } from './helpers/child-process.helpers';
 import { writeFileStreamAsync } from './helpers/fs.helpers';
 import { getLibreOfficeCommand, getLibreOfficePath } from './helpers/libreoffice.helpers';
-import { dirAsync } from './helpers/tmp.helpers';
 import type { LibreOfficeFileConverterOptions } from './libreoffice-file-converter.types';
 
 /**
@@ -37,6 +37,8 @@ export class LibreOfficeFileConverter {
     this._binaryPaths = binaryPaths;
     this._childProcessOptions = childProcessOptions;
     this._tmpOptions = tmpOptions;
+
+    setGracefulCleanup();
   }
 
   private getTemporaryFilePath = (temporaryDir: string): string => {
@@ -82,21 +84,21 @@ export class LibreOfficeFileConverter {
    * @returns {Promise<Buffer>} The output file Buffer.
    */
   public async convertBuffer(file: Buffer, format: string, filter?: string): Promise<Buffer> {
-    const temporaryDir = await dirAsync({
+    const temporaryDir = await dir({
       prefix: 'libreoffice-file-converter',
       unsafeCleanup: true,
       ...this._tmpOptions,
     });
 
-    const temporaryFilePath = this.getTemporaryFilePath(temporaryDir.name);
+    const temporaryFilePath = this.getTemporaryFilePath(temporaryDir.path);
 
     await writeFile(temporaryFilePath, file);
 
-    await this.convertFile(temporaryFilePath, temporaryDir.name, format, filter);
+    await this.convertFile(temporaryFilePath, temporaryDir.path, format, filter);
 
     const result = await readFile(`${temporaryFilePath}.${format}`);
 
-    temporaryDir.removeCallback();
+    temporaryDir.cleanup();
 
     return result;
   }
@@ -119,17 +121,17 @@ export class LibreOfficeFileConverter {
   public async convertFile(inputPath: string, outputDir: string, format: string, filter?: string): Promise<void> {
     const libreOfficePath = await getLibreOfficePath(this._binaryPaths);
 
-    const installationDir = await dirAsync({
+    const installationDir = await dir({
       prefix: 'soffice',
       unsafeCleanup: true,
       ...this._tmpOptions,
     });
 
-    const libreOfficeCommand = getLibreOfficeCommand(installationDir.name, inputPath, outputDir, format, filter);
+    const libreOfficeCommand = getLibreOfficeCommand(installationDir.path, inputPath, outputDir, format, filter);
 
     await execFileAsync(libreOfficePath, libreOfficeCommand, this._childProcessOptions);
 
-    installationDir.removeCallback();
+    installationDir.cleanup();
   }
 
   /**
@@ -149,20 +151,21 @@ export class LibreOfficeFileConverter {
    * @returns {Promise<Readable>} The output file readable stream.
    */
   public async convertStream(inputStream: Readable, format: string, filter?: string): Promise<Readable> {
-    const temporaryDir = await dirAsync({
+    const temporaryDir = await dir({
       prefix: 'libreoffice-file-converter',
+      unsafeCleanup: true,
       ...this._tmpOptions,
     });
 
-    const temporaryFilePath = this.getTemporaryFilePath(temporaryDir.name);
+    const temporaryFilePath = this.getTemporaryFilePath(temporaryDir.path);
 
     await writeFileStreamAsync(temporaryFilePath, inputStream);
 
-    await this.convertFile(temporaryFilePath, temporaryDir.name, format, filter);
+    await this.convertFile(temporaryFilePath, temporaryDir.path, format, filter);
 
     const result = createReadStream(`${temporaryFilePath}.${format}`);
 
-    temporaryDir.removeCallback();
+    temporaryDir.cleanup();
 
     return result;
   }
