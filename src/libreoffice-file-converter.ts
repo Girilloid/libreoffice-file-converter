@@ -1,9 +1,10 @@
-import { createReadStream } from 'fs';
-import { join } from 'path';
-import type { Readable } from 'stream';
+import { createReadStream } from 'node:fs';
+import { readFile, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
+import type { Readable } from 'node:stream';
 
 import { execFileAsync } from './helpers/child-process.helpers';
-import { readFileAsync, writeFileAsync, writeFileStreamAsync } from './helpers/fs.helpers';
+import { writeFileStreamAsync } from './helpers/fs.helpers';
 import { getLibreOfficeCommand, getLibreOfficePath } from './helpers/libreoffice.helpers';
 import { dirAsync } from './helpers/tmp.helpers';
 import type { LibreOfficeFileConverterOptions } from './libreoffice-file-converter.types';
@@ -89,11 +90,11 @@ export class LibreOfficeFileConverter {
 
     const temporaryFilePath = this.getTemporaryFilePath(temporaryDir.name);
 
-    await writeFileAsync(temporaryFilePath, file);
+    await writeFile(temporaryFilePath, file);
 
     await this.convertFile(temporaryFilePath, temporaryDir.name, format, filter);
 
-    const result = await readFileAsync(`${temporaryFilePath}.${format}`);
+    const result = await readFile(`${temporaryFilePath}.${format}`);
 
     temporaryDir.removeCallback();
 

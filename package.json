@@ -4,7 +4,24 @@
   "description": "Simple NodeJS wrapper for libreoffice CLI for converting office documents to different formats",
   "keywords": [
     "LibreOffice",
-    "convert"
+    "MS Office",
+    "Excel",
+    "PowerPoint",
+    "Word",
+    "converter",
+    "pdf",
+    "doc",
+    "docx",
+    "gif",
+    "jpg",
+    "odp",
+    "ods",
+    "odt",
+    "png",
+    "ppt",
+    "rtf",
+    "xls",
+    "xlsx"
   ],
   "repository": "https://github.com/Girilloid/libreoffice-file-converter",
   "license": "MIT",
@@ -58,6 +75,6 @@
     "typescript": "^5.0.4"
   },
   "engines": {
-    "node": ">=8"
+    "node": ">=14"
   }
 }

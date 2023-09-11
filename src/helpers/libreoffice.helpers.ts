@@ -1,6 +1,6 @@
-import { DARWIN_PATHS, LINUX_PATHS, WIN32_PATHS } from '../constants/paths';
+import { access } from 'node:fs/promises';
 
-import { accessAsync } from './fs.helpers';
+import { DARWIN_PATHS, LINUX_PATHS, WIN32_PATHS } from '../constants/paths';
 
 export const getPaths = (): string[] => {
   if (process.platform === 'darwin') {
@@ -23,17 +23,17 @@ export const getLibreOfficePath = async (binaryPaths: string[]): Promise<string>
 
   const existingPaths = await Promise.all(
     paths.map(async (path) => {
-      const exists = await accessAsync(path);
-
-      if (!exists) {
-        return null;
+      try {
+        await access(path);
+      } catch {
+        return false;
       }
 
       return path;
     }),
   );
 
-  const [path] = existingPaths.filter((path) => path);
+  const [path] = existingPaths.filter(Boolean);
 
   if (!path) {
     throw new Error('Could not find soffice binary');
