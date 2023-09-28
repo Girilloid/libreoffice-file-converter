@@ -79,6 +79,10 @@ describe('LibreOfficeFileConverter', () => {
           const resultBuffer = await libreOfficeFileConverter.convert(buffer, outputFormat);
 
           await writeFile(outputPath, resultBuffer);
+
+          const isExists = await access(outputPath);
+
+          expect(isExists).toBe(true);
         } catch (error) {
           exception = error;
         }
@@ -105,6 +109,10 @@ describe('LibreOfficeFileConverter', () => {
           const resultBuffer = await libreOfficeFileConverter.convertBuffer(buffer, outputFormat);
 
           await writeFile(outputPath, resultBuffer);
+
+          const isExists = await access(outputPath);
+
+          expect(isExists).toBe(true);
         } catch (error) {
           exception = error;
         }
