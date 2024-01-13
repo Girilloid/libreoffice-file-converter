@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: [14.21.*, 16.*, 18.*, 20.*]
+        version: [16.*, 18.*, 20.*]
 
     steps:
       - name: Checkout repository
