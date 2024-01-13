@@ -50,28 +50,6 @@ export class LibreOfficeFileConverter {
    *
    * @example
    * const inputBuffer = await fs.readFile('example.doc');
-   * const outputBuffer = await libreOfficeFileConverter.convert(inputBuffer, 'pdf');
-   *
-   * @async
-   * @public
-   *
-   * @deprecated use convertBuffer instead
-   *
-   * @param {Buffer} file - The input file Buffer.
-   * @param {string} format - The file format to convert to.
-   * @param {string=} filter - See LibreOffice docs about filter.
-   *
-   * @returns {Buffer} The output file Buffer.
-   */
-  public async convert(file: Buffer, format: string, filter?: string): Promise<Buffer> {
-    return this.convertBuffer(file, format, filter);
-  }
-
-  /**
-   * Converts the provided file Buffer to the requested format.
-   *
-   * @example
-   * const inputBuffer = await fs.readFile('example.doc');
    * const outputBuffer = await libreOfficeFileConverter.convertBuffer(inputBuffer, 'pdf');
    *
    * @async

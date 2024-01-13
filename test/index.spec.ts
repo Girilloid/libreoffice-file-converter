@@ -62,36 +62,6 @@ describe('LibreOfficeFileConverter', () => {
     await clearDir(outputDir);
   });
 
-  describe('convert()', () => {
-    formats.forEach((format) => {
-      const inputFileName = `example.${format}`;
-      const outputFileName = `example-${format}.${outputFormat}`;
-
-      return it(`Should convert ${format} file to ${outputFormat}`, async (): Promise<void> => {
-        let exception;
-
-        try {
-          const inputPath = getInputPath(inputFileName);
-          const outputPath = getOutputPath(outputFileName);
-
-          const buffer = await readFile(inputPath);
-
-          const resultBuffer = await libreOfficeFileConverter.convert(buffer, outputFormat);
-
-          await writeFile(outputPath, resultBuffer);
-
-          const isExists = await access(outputPath);
-
-          expect(isExists).toBe(true);
-        } catch (error) {
-          exception = error;
-        }
-
-        expect(exception).toBe(undefined);
-      });
-    });
-  });
-
   describe('convertBuffer()', () => {
     formats.forEach((format) => {
       const inputFileName = `example.${format}`;

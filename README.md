@@ -24,37 +24,6 @@ Array of paths to LibreOffice binary executables.
 
 `tmp.DirOptions` object. Can be used to configure behavior of `tmp` package, which is used to create temporary folders for LibreOffice data.
 
-### `LibreOfficeFileConverter.convert`
-
-This method is *deprecated*, please use `convertBuffer` instead.
-
-Converts the provided file Buffer to the requested format.
-
-```typescript
-import { readFile, writeFile } from 'fs/promises';
-import { join } from 'path';
-import { LibreOfficeFileConverter } from 'libreoffice-file-converter';
-
-const inputPath = join(__dirname, './resources/example.doc');
-const outputPath = join(__dirname, './resources/result.pdf');
-
-const run = async () => {
-  const libreOfficeFileConverter = new LibreOfficeFileConverter({
-    childProcessOptions: {
-      timeout: 60 * 1000,
-    },
-  });
-
-  const buffer = await readFile(inputPath);
-
-  const result = await libreOfficeFileConverter.convert(buffer, 'pdf');
-
-  await writeFile(outputPath, result);
-};
-
-run();
-```
-
 ### `LibreOfficeFileConverter.convertBuffer`
 
 Converts the provided file Buffer to the requested format.
