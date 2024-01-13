@@ -2,7 +2,7 @@
   "git": {
     "commit": true,
     "commitMessage": "chore(release): v${version}",
-    "push": false,
+    "push": true,
     "requireCommits": false,
     "requireCleanWorkingDir": false,
     "tag": true
