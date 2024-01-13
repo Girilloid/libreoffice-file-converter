@@ -20,7 +20,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           cache: yarn
-          node-version: 18.*
+          node-version: 20.*
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile --non-interactive
@@ -43,7 +43,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           cache: yarn
-          node-version: 18.*
+          node-version: 20.*
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile --non-interactive
