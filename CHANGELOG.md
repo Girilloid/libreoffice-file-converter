@@ -1,5 +1,12 @@
 
 
+## [2.1.0](https://github.com/Girilloid/libreoffice-file-converter/compare/v2.0.0...v2.1.0) (2024-01-13)
+
+
+### Features
+
+* Throw libreoffice error when it fails to convert file ([a255ff0](https://github.com/Girilloid/libreoffice-file-converter/commit/a255ff051a610e2d3d472caa1681679a00eec57b))
+
 ## [2.0.0](https://github.com/Girilloid/libreoffice-file-converter/compare/v1.2.1...v2.0.0) (2024-01-13)
 
 
