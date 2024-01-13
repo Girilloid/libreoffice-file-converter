@@ -90,6 +90,22 @@ describe('LibreOfficeFileConverter', () => {
         expect(exception).toBe(undefined);
       });
     });
+
+    it('Should throw an error when libreoffice fails to convert file', async (): Promise<void> => {
+      let exception;
+
+      try {
+        const inputPath = getInputPath('example.pdf');
+
+        const buffer = await readFile(inputPath);
+
+        await libreOfficeFileConverter.convertBuffer(buffer, 'docx');
+      } catch (error) {
+        exception = error;
+      }
+
+      expect(exception).toContain('Error');
+    });
   });
 
   describe('convertFile()', () => {
@@ -115,6 +131,20 @@ describe('LibreOfficeFileConverter', () => {
 
         expect(exception).toBe(undefined);
       });
+    });
+
+    it('Should throw an error when libreoffice fails to convert file', async (): Promise<void> => {
+      let exception;
+
+      try {
+        const inputPath = getInputPath('example.pdf');
+
+        await libreOfficeFileConverter.convertFile(inputPath, outputDir, 'docx');
+      } catch (error) {
+        exception = error;
+      }
+
+      expect(exception).toContain('Error');
     });
   });
 
@@ -145,6 +175,21 @@ describe('LibreOfficeFileConverter', () => {
 
         expect(exception).toBe(undefined);
       });
+    });
+
+    it('Should throw an error when libreoffice fails to convert file', async (): Promise<void> => {
+      let exception;
+
+      try {
+        const inputPath = getInputPath('example.pdf');
+        const inputStream = createReadStream(inputPath);
+
+        await libreOfficeFileConverter.convertStream(inputStream, 'docx');
+      } catch (error) {
+        exception = error;
+      }
+
+      expect(exception).toContain('Error');
     });
   });
 });
