@@ -1,3 +1,14 @@
+
+
+## [2.0.0](https://github.com/Girilloid/libreoffice-file-converter/compare/v1.2.1...v2.0.0) (2024-01-13)
+
+
+### Features
+
+* Drop support of NodeJS versions < 14 ([a49dfe3](https://github.com/Girilloid/libreoffice-file-converter/commit/a49dfe3b71c49e67b05bf0253e03bfaae771e11b))
+* Remove deprecated method ([00b6194](https://github.com/Girilloid/libreoffice-file-converter/commit/00b61947c453001cfad6e884db2603364d4337ad))
+* Replace tmp with tmp-promise ([d2fadbe](https://github.com/Girilloid/libreoffice-file-converter/commit/d2fadbe98226bded5b7bdc827f2a66cf85572c1a))
+
 # Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
