@@ -19,6 +19,8 @@ export class LibreOfficeFileConverter {
 
   private readonly _childProcessOptions: LibreOfficeFileConverterOptions['childProcessOptions'];
 
+  private readonly _debug: LibreOfficeFileConverterOptions['debug'];
+
   private readonly _tmpOptions: LibreOfficeFileConverterOptions['tmpOptions'];
 
   /**
@@ -32,10 +34,11 @@ export class LibreOfficeFileConverter {
    * @param {LibreOfficeFileConverterOptions=} [options={}] - The LibreOfficeFileConverter options.
    */
   constructor(options: LibreOfficeFileConverterOptions = {}) {
-    const { binaryPaths = [], childProcessOptions, tmpOptions } = options;
+    const { binaryPaths = [], childProcessOptions, debug, tmpOptions } = options;
 
     this._binaryPaths = binaryPaths;
     this._childProcessOptions = childProcessOptions;
+    this._debug = debug;
     this._tmpOptions = tmpOptions;
 
     setGracefulCleanup();
@@ -107,7 +110,7 @@ export class LibreOfficeFileConverter {
 
     const libreOfficeCommand = getLibreOfficeCommand(installationDir.path, inputPath, outputDir, format, filter);
 
-    await execFileAsync(libreOfficePath, libreOfficeCommand, this._childProcessOptions);
+    await execFileAsync(libreOfficePath, libreOfficeCommand, this._childProcessOptions, this._debug);
 
     installationDir.cleanup();
   }

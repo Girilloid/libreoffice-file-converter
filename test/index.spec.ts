@@ -55,6 +55,7 @@ describe('LibreOfficeFileConverter', () => {
       childProcessOptions: {
         timeout,
       },
+      debug: true,
     });
   });
 

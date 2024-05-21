@@ -4,5 +4,6 @@ import type { DirOptions } from 'tmp';
 export interface LibreOfficeFileConverterOptions {
   binaryPaths?: string[];
   childProcessOptions?: ExecFileOptions;
+  debug?: boolean;
   tmpOptions?: DirOptions;
 }

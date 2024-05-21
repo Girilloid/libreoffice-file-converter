@@ -15,3 +15,11 @@ export const writeFileStreamAsync = (path: string, readStream: Readable): Promis
     });
   });
 };
+
+export const getFileUri = (path: string): string => {
+  if (process.platform === 'win32') {
+    return `file:///${path}`;
+  }
+
+  return `file://${path}`;
+};
