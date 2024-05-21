@@ -1,5 +1,5 @@
-name: Setup LibreOffice
-description: Setups LibreOffice
+name: Setup LibreOffice Linux
+description: Setups LibreOffice on Linux
 
 runs:
   using: composite

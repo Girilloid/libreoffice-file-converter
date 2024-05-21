@@ -1,0 +1,12 @@
+name: Setup LibreOffice Windows
+description: Setups LibreOffice on Windows
+
+runs:
+  using: composite
+  steps:
+    - name: Install winget
+      uses: Cyberboss/install-winget@v1
+
+    - name: Install LibreOffice
+      run: winget install --id=TheDocumentFoundation.LibreOffice  -e
+      shell: pwsh
