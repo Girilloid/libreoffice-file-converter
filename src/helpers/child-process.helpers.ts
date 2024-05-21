@@ -11,6 +11,8 @@ export const execFileAsync = (
       if (debug) {
         // eslint-disable-next-line no-console
         console.log('LibreOffice debug output', {
+          args,
+          path,
           stderr,
           stdout,
         });

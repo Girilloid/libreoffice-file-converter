@@ -1,4 +1,5 @@
 import { createWriteStream } from 'node:fs';
+import { posix, sep } from 'node:path';
 import { pipeline } from 'node:stream';
 import type { Readable } from 'node:stream';
 
@@ -18,7 +19,9 @@ export const writeFileStreamAsync = (path: string, readStream: Readable): Promis
 
 export const getFileUri = (path: string): string => {
   if (process.platform === 'win32') {
-    return `file:///${path}`;
+    const posixPath = path.split(sep).join(posix.sep);
+
+    return `file:///${posixPath}`;
   }
 
   return `file://${path}`;

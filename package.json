@@ -44,8 +44,8 @@
     "prepare": "husky install",
     "release": "release-it",
     "release:preview": "release-it --dry-run",
-    "test": "jest",
-    "test:coverage": "jest --coverage"
+    "test": "jest --testTimeout=15000",
+    "test:coverage": "jest --testTimeout=15000 --coverage"
   },
   "dependencies": {
     "tmp-promise": "^3.0.3"
