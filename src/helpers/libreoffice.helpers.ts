@@ -1,8 +1,7 @@
 import { access } from 'node:fs/promises';
+import { pathToFileURL } from 'node:url';
 
 import { DARWIN_PATHS, LINUX_PATHS, WIN32_PATHS } from '../constants/paths';
-
-import { getFileUri } from './fs.helpers';
 
 export const getPaths = (): string[] => {
   if (process.platform === 'darwin') {
@@ -51,9 +50,7 @@ export const getLibreOfficeCommand = (
   format: string,
   filter?: string,
 ): string[] => {
-  const installationDirFileUri = getFileUri(installationDir);
-
-  let command = `-env:UserInstallation=${installationDirFileUri} --headless --convert-to ${format}`;
+  let command = `-env:UserInstallation=${pathToFileURL(installationDir)} --headless --convert-to ${format}`;
 
   if (filter) {
     command = `${command}:"${filter}"`;
