@@ -1,5 +1,14 @@
 
 
+## [2.1.1](https://github.com/Girilloid/libreoffice-file-converter/compare/v2.1.0...v2.1.1) (2024-05-21)
+
+
+### Bug Fixes
+
+* Use built-in pathToFileURL ([683445e](https://github.com/Girilloid/libreoffice-file-converter/commit/683445e6cd62cc3daae0b4aa4b88f327ccb7dae3))
+* Windows file URI ([e52714d](https://github.com/Girilloid/libreoffice-file-converter/commit/e52714d3a1b1b077589f613c6509d9a8c7f87b89))
+* Windows posix file URI ([b96c097](https://github.com/Girilloid/libreoffice-file-converter/commit/b96c097d2f1a02fa2bdde0b92d4eaedffaad8a95))
+
 ## [2.1.0](https://github.com/Girilloid/libreoffice-file-converter/compare/v2.0.0...v2.1.0) (2024-01-13)
 
 
