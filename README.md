@@ -20,6 +20,10 @@ Array of paths to LibreOffice binary executables.
 
 `child_process.ExecFileOptions` object. Can be used to configure such things as timeout, etc.
 
+#### `options.debug`
+
+Enables debug output for LibreOffice command execution.
+
 #### `options.tmpOptions`
 
 `tmp.DirOptions` object. Can be used to configure behavior of `tmp` package, which is used to create temporary folders for LibreOffice data.
