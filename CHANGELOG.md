@@ -1,5 +1,12 @@
 
 
+## [2.2.0](https://github.com/Girilloid/libreoffice-file-converter/compare/v2.1.1...v2.2.0) (2024-05-27)
+
+
+### Features
+
+* Improve deno compatibility ([5715194](https://github.com/Girilloid/libreoffice-file-converter/commit/5715194f8ea1f97f872c6d0ee406803115c15f86))
+
 ## [2.1.1](https://github.com/Girilloid/libreoffice-file-converter/compare/v2.1.0...v2.1.1) (2024-05-21)
 
 
