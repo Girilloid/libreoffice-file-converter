@@ -16,6 +16,9 @@
     "ignoreVersion": false
   },
   "plugins": {
+    "@release-it/bumper": {
+      "out": ["package.json", "jsr.json"]
+    },
     "@release-it/conventional-changelog": {
       "preset": {
         "name": "conventionalcommits"
