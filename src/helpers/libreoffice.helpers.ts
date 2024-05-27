@@ -1,4 +1,5 @@
 import { access } from 'node:fs/promises';
+import process from 'node:process';
 import { pathToFileURL } from 'node:url';
 
 import { DARWIN_PATHS, LINUX_PATHS, WIN32_PATHS } from '../constants/paths';
