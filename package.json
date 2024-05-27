@@ -23,7 +23,10 @@
     "xls",
     "xlsx"
   ],
-  "repository": "https://github.com/Girilloid/libreoffice-file-converter",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Girilloid/libreoffice-file-converter.git"
+  },
   "license": "MIT",
   "main": "./dist/index.mjs",
   "module": "./dist/index.mjs",
