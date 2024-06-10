@@ -6,7 +6,7 @@ import { dir, setGracefulCleanup } from 'tmp-promise';
 
 import { execFileAsync } from './helpers/child-process.helpers';
 import { writeFileStreamAsync } from './helpers/fs.helpers';
-import { getLibreOfficeCommand, getLibreOfficePath } from './helpers/libreoffice.helpers';
+import { getLibreOfficeCommandArgs, getLibreOfficePath } from './helpers/libreoffice.helpers';
 import type { LibreOfficeFileConverterOptions } from './libreoffice-file-converter.types';
 
 /**
@@ -108,9 +108,15 @@ export class LibreOfficeFileConverter {
       ...this._tmpOptions,
     });
 
-    const libreOfficeCommand = getLibreOfficeCommand(installationDir.path, inputPath, outputDir, format, filter);
+    const libreOfficeCommandArgs = getLibreOfficeCommandArgs(
+      installationDir.path,
+      inputPath,
+      outputDir,
+      format,
+      filter,
+    );
 
-    await execFileAsync(libreOfficePath, libreOfficeCommand, this._childProcessOptions, this._debug);
+    await execFileAsync(libreOfficePath, libreOfficeCommandArgs, this._childProcessOptions, this._debug);
 
     installationDir.cleanup();
   }

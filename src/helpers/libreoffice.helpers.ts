@@ -44,20 +44,25 @@ export const getLibreOfficePath = async (binaryPaths: string[]): Promise<string>
   return path;
 };
 
-export const getLibreOfficeCommand = (
+export const getLibreOfficeCommandArgs = (
   installationDir: string,
   inputPath: string,
   outputDir: string,
   format: string,
   filter?: string,
 ): string[] => {
-  let command = `-env:UserInstallation=${pathToFileURL(installationDir)} --headless --convert-to ${format}`;
+  const filterSegment = filter?.length > 0 ? `:${filter}` : '';
+  const formatArg = filter?.includes(' ') ? `"${format}${filterSegment}"` : `${format}${filterSegment}`;
 
-  if (filter) {
-    command = `${command}:"${filter}"`;
-  }
+  const args = [
+    `-env:UserInstallation=${pathToFileURL(installationDir)}`,
+    '--headless',
+    '--convert-to',
+    formatArg,
+    '--outdir',
+    outputDir,
+    inputPath,
+  ];
 
-  command = `${command} --outdir ${outputDir} ${inputPath}`;
-
-  return command.split(' ');
+  return args;
 };
