@@ -1,5 +1,17 @@
 
 
+## [2.3.0](https://github.com/Girilloid/libreoffice-file-converter/compare/v2.2.0...v2.3.0) (2024-06-10)
+
+
+### Features
+
+* Additional soffice paths for linux ([fcdb467](https://github.com/Girilloid/libreoffice-file-converter/commit/fcdb467455b75de21274b39e065f07ff5605c5dd))
+
+
+### Bug Fixes
+
+* Improved arguments passing ([30c205a](https://github.com/Girilloid/libreoffice-file-converter/commit/30c205ad443451e5578d231af6f74ee9ddc22b93))
+
 ## [2.2.0](https://github.com/Girilloid/libreoffice-file-converter/compare/v2.1.1...v2.2.0) (2024-05-27)
 
 
