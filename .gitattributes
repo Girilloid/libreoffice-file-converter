@@ -1,3 +1,3 @@
 *.lockb diff=lockb
 
-test/resources/* linguist-vendored=false
+test/resources/* linguist-vendored
