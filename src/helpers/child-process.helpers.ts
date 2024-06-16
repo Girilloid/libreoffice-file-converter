@@ -18,7 +18,7 @@ export const execFileAsync = (
         });
       }
 
-      const hasLibreOfficeError = stderr?.toLowerCase()?.includes('error');
+      const hasLibreOfficeError = stderr?.toLowerCase()?.includes('error:');
 
       if (error || hasLibreOfficeError) {
         return reject(error || stderr);
