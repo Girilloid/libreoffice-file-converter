@@ -1,5 +1,13 @@
 
 
+## [2.3.1](https://github.com/Girilloid/libreoffice-file-converter/compare/v2.3.0...v2.3.1) (2024-06-16)
+
+
+### Bug Fixes
+
+* Cleanup temp dirs on error ([258cf08](https://github.com/Girilloid/libreoffice-file-converter/commit/258cf08e19e82de27ab81d160e93ac76797aad1a))
+* LibreOffice configuration read error is recognized as a convert error ([bb87baf](https://github.com/Girilloid/libreoffice-file-converter/commit/bb87baf2c48968ba71cf0c09c1926947fc9bce21))
+
 ## [2.3.0](https://github.com/Girilloid/libreoffice-file-converter/compare/v2.2.0...v2.3.0) (2024-06-10)
 
 
