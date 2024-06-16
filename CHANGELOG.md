@@ -1,5 +1,12 @@
 
 
+## [2.3.2](https://github.com/Girilloid/libreoffice-file-converter/compare/v2.3.1...v2.3.2) (2024-06-16)
+
+
+### Bug Fixes
+
+* Better cleanup on error for stream operations ([27682aa](https://github.com/Girilloid/libreoffice-file-converter/commit/27682aa420de964bea7b8c4a94184cd97f4c9e0d))
+
 ## [2.3.1](https://github.com/Girilloid/libreoffice-file-converter/compare/v2.3.0...v2.3.1) (2024-06-16)
 
 
