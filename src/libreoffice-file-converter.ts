@@ -73,15 +73,17 @@ export class LibreOfficeFileConverter {
 
     const temporaryFilePath = this.getTemporaryFilePath(temporaryDir.path);
 
-    await writeFile(temporaryFilePath, file);
+    try {
+      await writeFile(temporaryFilePath, file);
 
-    await this.convertFile(temporaryFilePath, temporaryDir.path, format, filter);
+      await this.convertFile(temporaryFilePath, temporaryDir.path, format, filter);
 
-    const result = await readFile(`${temporaryFilePath}.${format}`);
+      const result = await readFile(`${temporaryFilePath}.${format}`);
 
-    temporaryDir.cleanup();
-
-    return result;
+      return result;
+    } finally {
+      await temporaryDir.cleanup();
+    }
   }
 
   /**
@@ -116,9 +118,11 @@ export class LibreOfficeFileConverter {
       filter,
     );
 
-    await execFileAsync(libreOfficePath, libreOfficeCommandArgs, this._childProcessOptions, this._debug);
-
-    installationDir.cleanup();
+    try {
+      await execFileAsync(libreOfficePath, libreOfficeCommandArgs, this._childProcessOptions, this._debug);
+    } finally {
+      await installationDir.cleanup();
+    }
   }
 
   /**
@@ -146,14 +150,16 @@ export class LibreOfficeFileConverter {
 
     const temporaryFilePath = this.getTemporaryFilePath(temporaryDir.path);
 
-    await writeFileStreamAsync(temporaryFilePath, inputStream);
+    try {
+      await writeFileStreamAsync(temporaryFilePath, inputStream);
 
-    await this.convertFile(temporaryFilePath, temporaryDir.path, format, filter);
+      await this.convertFile(temporaryFilePath, temporaryDir.path, format, filter);
 
-    const result = createReadStream(`${temporaryFilePath}.${format}`);
+      const result = createReadStream(`${temporaryFilePath}.${format}`);
 
-    temporaryDir.cleanup();
-
-    return result;
+      return result;
+    } finally {
+      await temporaryDir.cleanup();
+    }
   }
 }
