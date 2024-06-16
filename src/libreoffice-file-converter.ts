@@ -157,9 +157,13 @@ export class LibreOfficeFileConverter {
 
       const result = createReadStream(`${temporaryFilePath}.${format}`);
 
+      temporaryDir.cleanup();
+
       return result;
-    } finally {
+    } catch (error) {
       await temporaryDir.cleanup();
+
+      throw error;
     }
   }
 }
