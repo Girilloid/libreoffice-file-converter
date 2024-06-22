@@ -1,0 +1,12 @@
+name: Setup LibreOffice Darwin
+description: Setups LibreOffice on Darwin
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Homebrew
+      uses: Homebrew/actions/setup-homebrew@master
+
+    - name: Install LibreOffice
+      run: brew install --cask libreoffice
+      shell: bash

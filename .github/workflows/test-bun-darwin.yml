@@ -1,4 +1,4 @@
-name: Test libreoffice-file-converter with Bun on Linux
+name: Test libreoffice-file-converter with Bun on Darwin
 
 on:
   push:
@@ -8,14 +8,14 @@ on:
 
 jobs:
   test-bun:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Setup LibreOffice
-        uses: ./.github/actions/setup-libreoffice-linux
+        uses: ./.github/actions/setup-libreoffice-darwin
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v1
