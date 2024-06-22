@@ -80,9 +80,13 @@ export class LibreOfficeFileConverter {
 
       const result = await readFile(`${temporaryFilePath}.${format}`);
 
+      temporaryDir.cleanup();
+
       return result;
-    } finally {
+    } catch (error) {
       await temporaryDir.cleanup();
+
+      throw error;
     }
   }
 
@@ -120,8 +124,12 @@ export class LibreOfficeFileConverter {
 
     try {
       await execFileAsync(libreOfficePath, libreOfficeCommandArgs, this._childProcessOptions, this._debug);
-    } finally {
+
+      installationDir.cleanup();
+    } catch (error) {
       await installationDir.cleanup();
+
+      throw error;
     }
   }
 
