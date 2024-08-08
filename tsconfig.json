@@ -16,7 +16,7 @@
     "noUnusedParameters": false,
     "outDir": "./dist",
     "pretty": true,
-    "removeComments": true,
+    "removeComments": false,
     "sourceMap": false,
     "target": "ES6"
   }
