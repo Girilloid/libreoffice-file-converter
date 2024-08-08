@@ -1,5 +1,12 @@
 
 
+## [2.3.4](https://github.com/Girilloid/libreoffice-file-converter/compare/v2.3.3...v2.3.4) (2024-08-08)
+
+
+### Bug Fixes
+
+* Preserve jsdoc comments in d.ts ([1383f40](https://github.com/Girilloid/libreoffice-file-converter/commit/1383f408bce73c2b7205be27f7b6e484a253cb00))
+
 ## [2.3.3](https://github.com/Girilloid/libreoffice-file-converter/compare/v2.3.2...v2.3.3) (2024-06-22)
 
 
