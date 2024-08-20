@@ -2,4 +2,8 @@ node_modules
 dist
 coverage
 
-test/resources/output
+deno.lock
+
+test/resources/output-from-buffer
+test/resources/output-from-file
+test/resources/output-from-stream

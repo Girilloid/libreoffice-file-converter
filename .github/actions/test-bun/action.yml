@@ -1,0 +1,17 @@
+name: Test with Bun
+description: Tests package with Bun
+
+runs:
+  using: composite
+  steps:
+    - name: Install dependencies
+      run: bun install --frozen-lockfile
+      shell: bash
+
+    - name: Build package
+      run: bun run build
+      shell: bash
+
+    - name: Test package
+      run: bun test --timeout 15000 ./tests/*.spec.ts
+      shell: bash

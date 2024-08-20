@@ -22,14 +22,8 @@ jobs:
           cache: yarn
           node-version: 20.*
 
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile --non-interactive
-
-      - name: Build package
-        run: yarn build
-
       - name: Test package
-        run: yarn test
+        uses: ./.github/actions/test-node
 
   publish:
     runs-on: ubuntu-latest

@@ -1,0 +1,3 @@
+export const PROGRAM_FILES = 'PROGRAMFILES';
+
+export const PROGRAM_FILES_86 = 'PROGRAMFILES(X86)';
