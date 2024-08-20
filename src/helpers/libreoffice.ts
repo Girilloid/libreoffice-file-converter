@@ -2,9 +2,9 @@ import { access } from 'node:fs/promises';
 import process from 'node:process';
 import { pathToFileURL } from 'node:url';
 
-import { DARWIN_PATHS, LINUX_PATHS, WIN32_PATHS } from '../constants/paths';
+import { DARWIN_PATHS, LINUX_PATHS, WIN32_PATHS } from '../constants';
 
-export const getPaths = (): string[] => {
+export const getLibreOfficeExecutablePaths = (): readonly string[] => {
   if (process.platform === 'darwin') {
     return DARWIN_PATHS();
   }
@@ -17,11 +17,11 @@ export const getPaths = (): string[] => {
     return WIN32_PATHS();
   }
 
-  throw new Error(`Operating system not yet supported: ${process.platform}`);
+  return [];
 };
 
-export const getLibreOfficePath = async (binaryPaths: string[]): Promise<string> => {
-  const paths = [...binaryPaths, ...getPaths()];
+export const getLibreOfficeExecutablePath = async (binaryPaths: readonly string[] = []): Promise<string> => {
+  const paths = [...binaryPaths, ...getLibreOfficeExecutablePaths()];
 
   const existingPaths = await Promise.all(
     paths.map(async (path) => {
@@ -50,12 +50,12 @@ export const getLibreOfficeCommandArgs = (
   outputDir: string,
   format: string,
   filter?: string,
-): string[] => {
-  const filterSegment = filter?.length > 0 ? `:${filter}` : '';
+): readonly string[] => {
+  const filterSegment = filter && filter.length > 0 ? `:${filter}` : '';
   const formatArg = filter?.includes(' ') ? `"${format}${filterSegment}"` : `${format}${filterSegment}`;
 
   const args = [
-    `-env:UserInstallation=${pathToFileURL(installationDir)}`,
+    `-env:UserInstallation=${pathToFileURL(installationDir).toString()}`,
     '--headless',
     '--convert-to',
     formatArg,
@@ -65,4 +65,8 @@ export const getLibreOfficeCommandArgs = (
   ];
 
   return args;
+};
+
+export const hasLibreOfficeError = (stderr: string): boolean => {
+  return stderr?.toLowerCase()?.includes('error:');
 };

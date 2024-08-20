@@ -1,3 +1,0 @@
-export const PROGRAMFILES = 'PROGRAMFILES';
-
-export const PROGRAMFILES86 = 'PROGRAMFILES(X86)';

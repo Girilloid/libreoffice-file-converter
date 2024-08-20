@@ -1,84 +1,161 @@
+import type { Buffer } from 'node:buffer';
 import { createReadStream } from 'node:fs';
 import { readFile, writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
 import type { Readable } from 'node:stream';
 import { dir, setGracefulCleanup } from 'tmp-promise';
 
-import { execFileAsync } from './helpers/child-process.helpers';
-import { writeFileStreamAsync } from './helpers/fs.helpers';
-import { getLibreOfficeCommandArgs, getLibreOfficePath } from './helpers/libreoffice.helpers';
-import type { LibreOfficeFileConverterOptions } from './libreoffice-file-converter.types';
+import {
+  deepMerge,
+  execFileAsync,
+  getLibreOfficeCommandArgs,
+  getLibreOfficeExecutablePath,
+  getTemporaryFilePath,
+  writeStream,
+} from './helpers';
+import type {
+  ConvertOptions,
+  ConvertOptionsInput,
+  ConvertOutputOptionsBuffer,
+  ConvertOutputOptionsFile,
+  ConvertOutputOptionsStream,
+  LibreOfficeFileConverterOptions,
+} from './types';
 
 /**
  * Simple NodeJS wrapper for libreoffice CLI for converting office documents to different formats.
  *
+ * @example
+ * ```ts
+ * const libreOfficeFileConverter = new LibreOfficeFileConverter({ childProcessOptions: { timeout: 60 * 1000 } });
+ * ```
+ *
  * @class
+ * @public
  */
 export class LibreOfficeFileConverter {
-  private readonly _binaryPaths: LibreOfficeFileConverterOptions['binaryPaths'];
-
-  private readonly _childProcessOptions: LibreOfficeFileConverterOptions['childProcessOptions'];
-
-  private readonly _debug: LibreOfficeFileConverterOptions['debug'];
-
-  private readonly _tmpOptions: LibreOfficeFileConverterOptions['tmpOptions'];
+  private readonly _options: LibreOfficeFileConverterOptions;
 
   /**
    * Create an instance of the LibreOfficeFileConverter.
    *
    * @example
+   * ```ts
    * const libreOfficeFileConverter = new LibreOfficeFileConverter({ childProcessOptions: { timeout: 60 * 1000 } });
+   * ```
+   *
+   * @param options The LibreOfficeFileConverter options.
    *
    * @constructor
-   *
-   * @param {LibreOfficeFileConverterOptions=} [options={}] - The LibreOfficeFileConverter options.
+   * @public
    */
   constructor(options: LibreOfficeFileConverterOptions = {}) {
-    const { binaryPaths = [], childProcessOptions, debug, tmpOptions } = options;
-
-    this._binaryPaths = binaryPaths;
-    this._childProcessOptions = childProcessOptions;
-    this._debug = debug;
-    this._tmpOptions = tmpOptions;
+    this._options = options;
 
     setGracefulCleanup();
   }
 
-  private getTemporaryFilePath = (temporaryDir: string): string => {
-    return join(temporaryDir, 'source');
-  };
-
   /**
-   * Converts the provided file Buffer to the requested format.
+   * Converts provided input to the requested format.
    *
    * @example
-   * const inputBuffer = await fs.readFile('example.doc');
-   * const outputBuffer = await libreOfficeFileConverter.convertBuffer(inputBuffer, 'pdf');
+   * ```ts
+   * const outputBuffer = await libreOfficeFileConverter.convert({
+   *  buffer: inputBuffer,
+   *  format: 'pdf',
+   *  input: 'buffer',
+   *  output: 'buffer',
+   * });
+   * ```
    *
-   * @async
+   * @param options Convert options: input and output type, format, filter, converter options.
+   *
+   * @returns Buffer of the converted input.
+   *
+   * @overload
    * @public
-   *
-   * @param {Buffer} file - The input file Buffer.
-   * @param {string} format - The file format to convert to.
-   * @param {string=} filter - See LibreOffice docs about filter.
-   *
-   * @returns {Promise<Buffer>} The output file Buffer.
    */
-  public async convertBuffer(file: Buffer, format: string, filter?: string): Promise<Buffer> {
+  public async convert(options: ConvertOptionsInput & ConvertOutputOptionsBuffer): Promise<Buffer>;
+
+  /**
+   * Converts provided input to the requested format.
+   *
+   * @example
+   * ```ts
+   * await libreOfficeFileConverter.convert({
+   *  format: 'pdf',
+   *  input: 'file',
+   *  inputPath,
+   *  output: 'file',
+   *  outputPath,
+   * });
+   * ```
+   *
+   * @param options Convert options: input and output type, format, filter, converter options.
+   *
+   * @overload
+   * @public
+   */
+  public async convert(options: ConvertOptionsInput & ConvertOutputOptionsFile): Promise<void>;
+
+  /**
+   * Converts provided input to the requested format.
+   *
+   * @example
+   * ```ts
+   * const outputStream = await libreOfficeFileConverter.convert({
+   *  format: 'pdf',
+   *  input: 'stream',
+   *  stream: inputStream,
+   *  output: 'stream',
+   * });
+   * ```
+   *
+   * @param options Convert options: input and output type, format, filter, converter options.
+   *
+   * @returns Readable stream of the converted input.
+   *
+   * @overload
+   * @public
+   */
+  public async convert(options: ConvertOptionsInput & ConvertOutputOptionsStream): Promise<Readable>;
+
+  /**
+   * Converts provided input to the requested format.
+   *
+   * @example
+   * ```ts
+   * const outputBuffer = await libreOfficeFileConverter.convert({
+   *  buffer: inputBuffer,
+   *  format: 'pdf',
+   *  input: 'buffer',
+   *  output: 'buffer',
+   * });
+   * ```
+   *
+   * @param options Convert options: input and output type, format, filter, converter options.
+   *
+   * @returns Buffer, readable stream or void depending on the convert options.
+   *
+   * @public
+   */
+  public async convert(options: ConvertOptions): Promise<Buffer | Readable | void> {
+    const { format, filter, options: callOptions = {} } = options;
+
+    const mergedOptions = this.mergeOptions(callOptions);
+    const { tmpOptions } = mergedOptions;
+
     const temporaryDir = await dir({
       prefix: 'libreoffice-file-converter',
       unsafeCleanup: true,
-      ...this._tmpOptions,
+      ...tmpOptions,
     });
 
-    const temporaryFilePath = this.getTemporaryFilePath(temporaryDir.path);
-
     try {
-      await writeFile(temporaryFilePath, file);
+      const inputPath = await this.write(options, temporaryDir.path);
 
-      await this.convertFile(temporaryFilePath, temporaryDir.path, format, filter);
+      await this.process(inputPath, temporaryDir.path, format, filter, mergedOptions);
 
-      const result = await readFile(`${temporaryFilePath}.${format}`);
+      const result = await this.read(options, temporaryDir.path, inputPath);
 
       temporaryDir.cleanup();
 
@@ -90,28 +167,41 @@ export class LibreOfficeFileConverter {
     }
   }
 
-  /**
-   * Converts the provided file to the requested format.
-   *
-   * @example
-   * await libreOfficeFileConverter.convertFile('example.doc', 'pdf');
-   * const outputBuffer = await fs.readFile('example.pdf');
-   *
-   * @async
-   * @public
-   *
-   * @param {string} inputPath - The path to the input file within file system.
-   * @param {string} outputDir - The output directory path within file system.
-   * @param {string} format - The file format to convert to.
-   * @param {string=} filter - See LibreOffice docs about filter.
-   */
-  public async convertFile(inputPath: string, outputDir: string, format: string, filter?: string): Promise<void> {
-    const libreOfficePath = await getLibreOfficePath(this._binaryPaths);
+  private getProcessedFilePath(temporaryDirPath: string, inputPath: string, format: string): string {
+    const insideTemporaryDir = inputPath.startsWith(temporaryDirPath);
+
+    if (insideTemporaryDir) {
+      return `${inputPath}.${format}`;
+    }
+
+    const inputFileNameSegment = inputPath.split('/').at(-1);
+    const inputFileName = inputFileNameSegment?.split('.').at(0);
+
+    return `${temporaryDirPath}/${inputFileName}.${format}`;
+  }
+
+  private mergeOptions(options: LibreOfficeFileConverterOptions = {}): LibreOfficeFileConverterOptions {
+    const thisOptionsClone = structuredClone(this._options);
+    const optionsClone = structuredClone(options);
+
+    return deepMerge(thisOptionsClone, optionsClone);
+  }
+
+  private async process(
+    inputPath: string,
+    outputDir: string,
+    format: string,
+    filter?: string,
+    options: LibreOfficeFileConverterOptions = {},
+  ): Promise<void> {
+    const { binaryPaths, childProcessOptions, debug, tmpOptions } = options;
+
+    const libreOfficeExecutablePath = await getLibreOfficeExecutablePath(binaryPaths);
 
     const installationDir = await dir({
       prefix: 'soffice',
       unsafeCleanup: true,
-      ...this._tmpOptions,
+      ...tmpOptions,
     });
 
     const libreOfficeCommandArgs = getLibreOfficeCommandArgs(
@@ -123,7 +213,7 @@ export class LibreOfficeFileConverter {
     );
 
     try {
-      await execFileAsync(libreOfficePath, libreOfficeCommandArgs, this._childProcessOptions, this._debug);
+      await execFileAsync(libreOfficeExecutablePath, libreOfficeCommandArgs, childProcessOptions, debug);
 
       installationDir.cleanup();
     } catch (error) {
@@ -133,45 +223,59 @@ export class LibreOfficeFileConverter {
     }
   }
 
-  /**
-   * Converts the provided readable stream to the requested format.
-   *
-   * @example
-   * const inputStream = await fs.createReadStream('example.doc');
-   * const outputStream = await libreOfficeFileConverter.convertStream(inputStream, 'pdf');
-   *
-   * @async
-   * @public
-   *
-   * @param {Readable} inputStream - The input file readable stream.
-   * @param {string} format - The file format to convert to.
-   * @param {string=} filter - See LibreOffice docs about filter.
-   *
-   * @returns {Promise<Readable>} The output file readable stream.
-   */
-  public async convertStream(inputStream: Readable, format: string, filter?: string): Promise<Readable> {
-    const temporaryDir = await dir({
-      prefix: 'libreoffice-file-converter',
-      unsafeCleanup: true,
-      ...this._tmpOptions,
-    });
+  private async read(
+    options: ConvertOptions,
+    temporaryDirPath: string,
+    inputPath: string,
+  ): Promise<Buffer | Readable | void> {
+    const { format, output } = options;
 
-    const temporaryFilePath = this.getTemporaryFilePath(temporaryDir.path);
+    const processedFilePath = this.getProcessedFilePath(temporaryDirPath, inputPath, format);
 
-    try {
-      await writeFileStreamAsync(temporaryFilePath, inputStream);
-
-      await this.convertFile(temporaryFilePath, temporaryDir.path, format, filter);
-
-      const result = createReadStream(`${temporaryFilePath}.${format}`);
-
-      temporaryDir.cleanup();
-
-      return result;
-    } catch (error) {
-      await temporaryDir.cleanup();
-
-      throw error;
+    if (output === 'buffer') {
+      return readFile(processedFilePath);
     }
+
+    if (output === 'file') {
+      const { outputPath } = options;
+
+      const stream = createReadStream(processedFilePath);
+
+      return writeStream(outputPath, stream);
+    }
+
+    if (output === 'stream') {
+      return createReadStream(processedFilePath);
+    }
+  }
+
+  private async write(options: ConvertOptions, temporaryDirPath: string): Promise<string> {
+    const { input } = options;
+
+    const temporaryFilePath = getTemporaryFilePath(temporaryDirPath);
+
+    if (input === 'buffer') {
+      const { buffer } = options;
+
+      await writeFile(temporaryFilePath, buffer);
+
+      return temporaryFilePath;
+    }
+
+    if (input === 'file') {
+      const { inputPath } = options;
+
+      return inputPath;
+    }
+
+    if (input === 'stream') {
+      const { stream } = options;
+
+      await writeStream(temporaryFilePath, stream);
+
+      return temporaryFilePath;
+    }
+
+    return temporaryFilePath;
   }
 }

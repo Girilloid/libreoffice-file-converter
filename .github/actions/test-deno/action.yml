@@ -1,0 +1,9 @@
+name: Test with Deno
+description: Tests package with Deno
+
+runs:
+  using: composite
+  steps:
+    - name: Test package
+      run: deno test --allow-all --parallel
+      shell: bash
