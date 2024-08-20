@@ -181,10 +181,7 @@ export class LibreOfficeFileConverter {
   }
 
   private mergeOptions(options: LibreOfficeFileConverterOptions = {}): LibreOfficeFileConverterOptions {
-    const thisOptionsClone = structuredClone(this._options);
-    const optionsClone = structuredClone(options);
-
-    return deepMerge(thisOptionsClone, optionsClone);
+    return deepMerge(this._options, options);
   }
 
   private async process(
