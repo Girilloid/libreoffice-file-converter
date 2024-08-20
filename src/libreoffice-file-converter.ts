@@ -1,6 +1,7 @@
 import type { Buffer } from 'node:buffer';
 import { createReadStream } from 'node:fs';
 import { readFile, writeFile } from 'node:fs/promises';
+import { sep } from 'node:path';
 import type { Readable } from 'node:stream';
 import { dir, setGracefulCleanup } from 'tmp-promise';
 
@@ -174,7 +175,7 @@ export class LibreOfficeFileConverter {
       return `${inputPath}.${format}`;
     }
 
-    const inputFileNameSegment = inputPath.split('/').at(-1);
+    const inputFileNameSegment = inputPath.split(sep).at(-1);
     const inputFileName = inputFileNameSegment?.split('.').at(0);
 
     return `${temporaryDirPath}/${inputFileName}.${format}`;
