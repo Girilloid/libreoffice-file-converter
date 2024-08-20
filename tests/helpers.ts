@@ -1,5 +1,5 @@
 import { access as fsAccess, readdir, unlink } from 'node:fs/promises';
-import { resolve } from 'node:path';
+import { join } from 'node:path';
 
 export const access = async (path: string): Promise<boolean> => {
   try {
@@ -16,18 +16,18 @@ export const clearDir = async (path: string): Promise<void> => {
 
   await Promise.all(
     files.map((file) => {
-      return unlink(resolve(path, file));
+      return unlink(join(path, file));
     }),
   );
 };
 
 export const getInputPath = (fileName: string): string => {
-  return resolve('./tests/resources', fileName);
+  return join(__dirname, 'resources', fileName);
 };
 
 export const getOutputPathFactory = (outputDir: string) => {
   return (fileName: string): string => {
-    return resolve(`./tests/resources/${outputDir}`, fileName);
+    return join(__dirname, `resources/${outputDir}`, fileName);
   };
 };
 
