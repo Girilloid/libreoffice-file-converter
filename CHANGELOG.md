@@ -1,5 +1,7 @@
 
 
+## [3.0.1](https://github.com/Girilloid/libreoffice-file-converter/compare/v3.0.0...v3.0.1) (2024-08-22)
+
 ## [3.0.0](https://github.com/Girilloid/libreoffice-file-converter/compare/v2.3.4...v3.0.0) (2024-08-22)
 
 
