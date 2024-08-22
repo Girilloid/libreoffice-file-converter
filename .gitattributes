@@ -1,4 +1,4 @@
 * text=lf
 *.lockb diff=lockb
 
-test/resources/* linguist-vendored
+tests/resources/* linguist-vendored
