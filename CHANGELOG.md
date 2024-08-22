@@ -1,5 +1,24 @@
 
 
+## [3.0.0](https://github.com/Girilloid/libreoffice-file-converter/compare/v2.3.4...v3.0.0) (2024-08-22)
+
+
+### ⚠ BREAKING CHANGES
+
+* convertBuffer, convertFile and convertStream are replaced with a single convert method
+
+### Features
+
+* Advanced conversion configuration ([e1f79c9](https://github.com/Girilloid/libreoffice-file-converter/commit/e1f79c93053d989285ff16a9f47f55727465f9aa))
+
+
+### Bug Fixes
+
+* Get rid of structureClone for better compatibility with node < 17 ([b3a0ae5](https://github.com/Girilloid/libreoffice-file-converter/commit/b3a0ae5201b3c2873f3ea8fe3a6901e8715fe533))
+* Preserve dots in file name ([c20e94b](https://github.com/Girilloid/libreoffice-file-converter/commit/c20e94b69de48d6f738d4d2b233f45a3766a445a))
+* Use platform specific separator ([8dc3cd7](https://github.com/Girilloid/libreoffice-file-converter/commit/8dc3cd7c5eb658323d5ba0f6e7d12e71e5a232ba))
+* Use platform specific separator for path creation ([f5bb4fe](https://github.com/Girilloid/libreoffice-file-converter/commit/f5bb4fe12872eb7cc594826922f38f39fa520ba1))
+
 ## [2.3.4](https://github.com/Girilloid/libreoffice-file-converter/compare/v2.3.3...v2.3.4) (2024-08-08)
 
 
