@@ -17,7 +17,7 @@
   },
   "plugins": {
     "@release-it/bumper": {
-      "out": "jsr.json"
+      "out": ["deno.json", "jsr.json"]
     },
     "@release-it/conventional-changelog": {
       "preset": {
