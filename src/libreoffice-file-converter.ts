@@ -176,7 +176,9 @@ export class LibreOfficeFileConverter {
     }
 
     const inputFileNameSegment = inputPath.split(sep).at(-1);
-    const inputFileName = inputFileNameSegment?.split('.').at(0);
+    const inputFileNameSegments = inputFileNameSegment?.split('.');
+
+    const inputFileName = inputFileNameSegments?.slice(0, -1).join('.');
 
     return `${temporaryDirPath}${sep}${inputFileName}.${format}`;
   }
