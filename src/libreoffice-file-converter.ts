@@ -1,7 +1,6 @@
 import type { Buffer } from 'node:buffer';
 import { createReadStream } from 'node:fs';
 import { readFile, writeFile } from 'node:fs/promises';
-import { sep } from 'node:path';
 import type { Readable } from 'node:stream';
 import { dir, setGracefulCleanup } from 'tmp-promise';
 
@@ -10,6 +9,7 @@ import {
   execFileAsync,
   getLibreOfficeCommandArgs,
   getLibreOfficeExecutablePath,
+  getProcessedFilePath,
   getTemporaryFilePath,
   writeStream,
 } from './helpers';
@@ -168,21 +168,6 @@ export class LibreOfficeFileConverter {
     }
   }
 
-  private getProcessedFilePath(temporaryDirPath: string, inputPath: string, format: string): string {
-    const insideTemporaryDir = inputPath.startsWith(temporaryDirPath);
-
-    if (insideTemporaryDir) {
-      return `${inputPath}.${format}`;
-    }
-
-    const inputFileNameSegment = inputPath.split(sep).at(-1);
-    const inputFileNameSegments = inputFileNameSegment?.split('.');
-
-    const inputFileName = inputFileNameSegments?.slice(0, -1).join('.');
-
-    return `${temporaryDirPath}${sep}${inputFileName}.${format}`;
-  }
-
   private mergeOptions(options: LibreOfficeFileConverterOptions = {}): LibreOfficeFileConverterOptions {
     return deepMerge(this._options, options);
   }
@@ -230,7 +215,7 @@ export class LibreOfficeFileConverter {
   ): Promise<Buffer | Readable | void> {
     const { format, output } = options;
 
-    const processedFilePath = this.getProcessedFilePath(temporaryDirPath, inputPath, format);
+    const processedFilePath = getProcessedFilePath(temporaryDirPath, inputPath, format);
 
     if (output === 'buffer') {
       return readFile(processedFilePath);

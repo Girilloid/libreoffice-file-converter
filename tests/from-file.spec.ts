@@ -65,6 +65,35 @@ describe('LibreOfficeFileConverter convert from file', () => {
       });
     });
 
+    it('converts doc to pdf (file without extension)', async () => {
+      const inputFileName = 'example';
+      const outputFileName = `example-no-extension.${outputFormat}`;
+
+      let exception;
+
+      try {
+        const inputPath = getInputPath(inputFileName);
+        const outputPath = getOutputPath(outputFileName);
+
+        const outputBuffer = await libreOfficeFileConverter.convert({
+          format: outputFormat,
+          input: 'file',
+          inputPath,
+          output: 'buffer',
+        });
+
+        await writeFile(outputPath, outputBuffer);
+
+        const isExists = await access(outputPath);
+
+        expect(isExists).toBe(true);
+      } catch (error) {
+        exception = error;
+      }
+
+      expect(exception).toBe(undefined);
+    });
+
     it('throws an error when libreoffice fails to convert file', async (): Promise<void> => {
       let exception: Error | null = null;
 
@@ -114,6 +143,34 @@ describe('LibreOfficeFileConverter convert from file', () => {
 
         expect(exception).toBe(undefined);
       });
+    });
+
+    it('converts doc to pdf (file without extension)', async () => {
+      const inputFileName = 'example';
+      const outputFileName = `example-no-extension.${outputFormat}`;
+
+      let exception;
+
+      try {
+        const inputPath = getInputPath(inputFileName);
+        const outputPath = getOutputPath(outputFileName);
+
+        await libreOfficeFileConverter.convert({
+          format: outputFormat,
+          input: 'file',
+          inputPath,
+          output: 'file',
+          outputPath,
+        });
+
+        const isExists = await access(outputPath);
+
+        expect(isExists).toBe(true);
+      } catch (error) {
+        exception = error;
+      }
+
+      expect(exception).toBe(undefined);
     });
 
     it('throws an error when libreoffice fails to convert file', async (): Promise<void> => {
@@ -168,6 +225,35 @@ describe('LibreOfficeFileConverter convert from file', () => {
 
         expect(exception).toBe(undefined);
       });
+    });
+
+    it('converts doc to pdf (file without extension)', async () => {
+      const inputFileName = 'example';
+      const outputFileName = `example-no-extension.${outputFormat}`;
+
+      let exception;
+
+      try {
+        const inputPath = getInputPath(inputFileName);
+        const outputPath = getOutputPath(outputFileName);
+
+        const outputStream = await libreOfficeFileConverter.convert({
+          format: outputFormat,
+          input: 'file',
+          inputPath,
+          output: 'stream',
+        });
+
+        await writeStream(outputPath, outputStream);
+
+        const isExists = await access(outputPath);
+
+        expect(isExists).toBe(true);
+      } catch (error) {
+        exception = error;
+      }
+
+      expect(exception).toBe(undefined);
     });
 
     it('throws an error when libreoffice fails to convert file', async (): Promise<void> => {
