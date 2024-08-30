@@ -13,5 +13,5 @@ runs:
       shell: bash
 
     - name: Test package
-      run: yarn test
+      run: yarn test --maxWorkers=1
       shell: bash

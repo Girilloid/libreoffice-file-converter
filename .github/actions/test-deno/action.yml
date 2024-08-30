@@ -5,5 +5,5 @@ runs:
   using: composite
   steps:
     - name: Test package
-      run: deno test --allow-all --parallel
+      run: deno test --allow-all
       shell: bash
