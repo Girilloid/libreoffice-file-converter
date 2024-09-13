@@ -20,7 +20,7 @@ jobs:
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
-          bun-version: 1.1.24
+          bun-version: 1.1.27
 
       - name: Test package
         uses: ./.github/actions/test-bun
