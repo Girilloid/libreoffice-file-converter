@@ -5,5 +5,9 @@ runs:
   using: composite
   steps:
     - name: Install LibreOffice
-      run: sudo apt update && sudo apt install libreoffice -y
+      run: sudo add-apt-repository --yes ppa:libreoffice && sudo apt update && sudo apt install libreoffice -y
+      shell: bash
+
+    - name: Print LibreOffice Version
+      run: libreoffice --version
       shell: bash

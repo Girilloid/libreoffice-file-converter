@@ -10,3 +10,7 @@ runs:
     - name: Install LibreOffice
       run: brew install --cask libreoffice
       shell: bash
+
+    - name: Print LibreOffice Version
+      run: libreoffice --version
+      shell: bash

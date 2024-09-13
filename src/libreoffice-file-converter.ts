@@ -140,7 +140,7 @@ export class LibreOfficeFileConverter {
    * @public
    */
   public async convert(options: ConvertOptions): Promise<Buffer | Readable | void> {
-    const { format, filter, options: callOptions = {} } = options;
+    const { filter, format, inputFilter, options: callOptions = {}, outputFilter } = options;
 
     const mergedOptions = this.mergeOptions(callOptions);
     const { tmpOptions } = mergedOptions;
@@ -154,7 +154,7 @@ export class LibreOfficeFileConverter {
     try {
       const inputPath = await this.write(options, temporaryDir.path);
 
-      await this.process(inputPath, temporaryDir.path, format, filter, mergedOptions);
+      await this.process(inputPath, temporaryDir.path, format, inputFilter || filter, outputFilter, mergedOptions);
 
       const result = await this.read(options, temporaryDir.path, inputPath);
 
@@ -176,7 +176,8 @@ export class LibreOfficeFileConverter {
     inputPath: string,
     outputDir: string,
     format: string,
-    filter?: string,
+    inputFilter?: string,
+    outputFilter?: string,
     options: LibreOfficeFileConverterOptions = {},
   ): Promise<void> {
     const { binaryPaths, childProcessOptions, debug, tmpOptions } = options;
@@ -194,7 +195,8 @@ export class LibreOfficeFileConverter {
       inputPath,
       outputDir,
       format,
-      filter,
+      inputFilter,
+      outputFilter,
     );
 
     try {

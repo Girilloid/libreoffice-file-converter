@@ -90,7 +90,10 @@ export type ConvertOutputOptions = ConvertOutputOptionsBuffer | ConvertOutputOpt
 
 export type ConvertOptionsInput = ConvertInputOptions & {
   /**
-   * LibreOffice convert filter.
+   * LibreOffice output filter.
+   * See LibreOffice docs https://help.libreoffice.org/latest/en-US/text/shared/guide/convertfilters.html
+   *
+   * @deprecated Use `outputFilter` instead.
    */
   readonly filter?: string;
 
@@ -100,9 +103,21 @@ export type ConvertOptionsInput = ConvertInputOptions & {
   readonly format: string;
 
   /**
+   * LibreOffice input filter.
+   * See LibreOffice docs https://help.libreoffice.org/latest/en-US/text/shared/guide/convertfilters.html
+   */
+  readonly inputFilter?: string;
+
+  /**
    * LibreOfficeConverter options.
    */
   readonly options?: LibreOfficeFileConverterOptions;
+
+  /**
+   * LibreOffice output filter.
+   * See LibreOffice docs https://help.libreoffice.org/latest/en-US/text/shared/guide/convertfilters.html
+   */
+  readonly outputFilter?: string;
 };
 
 export type ConvertOptions = ConvertOptionsInput & ConvertOutputOptions;

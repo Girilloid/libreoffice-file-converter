@@ -49,20 +49,18 @@ export const getLibreOfficeCommandArgs = (
   inputPath: string,
   outputDir: string,
   format: string,
-  filter?: string,
+  inputFilter?: string,
+  outputFilter?: string,
 ): readonly string[] => {
-  const filterSegment = filter && filter.length > 0 ? `:${filter}` : '';
-  const formatArg = filter?.includes(' ') ? `"${format}${filterSegment}"` : `${format}${filterSegment}`;
+  const filterSegment = outputFilter && outputFilter.length > 0 ? `:"${outputFilter}"` : '';
 
-  const args = [
-    `-env:UserInstallation=${pathToFileURL(installationDir).toString()}`,
-    '--headless',
-    '--convert-to',
-    formatArg,
-    '--outdir',
-    outputDir,
-    inputPath,
-  ];
+  const args = [`-env:UserInstallation=${pathToFileURL(installationDir).toString()}`, '--headless'];
+
+  if (inputFilter && inputFilter.length > 0) {
+    args.push(`--infilter="${inputFilter}"`);
+  }
+
+  args.push('--convert-to', `${format}${filterSegment}`, '--outdir', outputDir, inputPath);
 
   return args;
 };

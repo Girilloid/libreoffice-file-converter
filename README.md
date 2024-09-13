@@ -30,9 +30,47 @@ Enables debug output for LibreOffice command execution.
 
 ### `LibreOfficeFileConverter.convert`
 
-Converts provided file, Buffer or `Readable` stream to the request format.
+Converts provided file, `Buffer` or `Readable` stream to the request format.
 
-From Buffer to Buffer.
+#### `input`
+
+Input type: `buffer` | `file` | `stream`.
+
+Defines corresponding field for input: `buffer` | `inputPath` | `stream`.
+
+#### `output`
+
+Output type: `buffer` | `file` | `stream`.
+
+Requires `outputPath` field to be present when set to `file`.
+
+Defines return type: `Promise<Buffer>` | `Promise<void>` | `Promise<Readable>`.
+
+#### `format`
+
+Conversion format.
+
+#### `inputFilter`
+
+LibreOffice input filter, see [docs](https://help.libreoffice.org/latest/en-US/text/shared/guide/convertfilters.html).
+
+#### `outputFilter`
+
+LibreOffice output filter, see [docs](https://help.libreoffice.org/latest/en-US/text/shared/guide/convertfilters.html).
+
+#### `filter`
+
+LibreOffice output filter, see [docs](https://help.libreoffice.org/latest/en-US/text/shared/guide/convertfilters.html).
+
+Deprecated, use `outputFilter` instead.
+
+#### `options`
+
+Overrides for LibreOfficeFileConverter instance options.
+
+### Examples
+
+From `Buffer` to `Buffer`.
 
 ```ts
 import { readFile } from 'fs/promises';
@@ -61,7 +99,7 @@ const run = async () => {
 run();
 ```
 
-From Buffer to file.
+From `Buffer` to file.
 
 ```ts
 import { readFile } from 'fs/promises';
@@ -92,7 +130,7 @@ const run = async () => {
 run();
 ```
 
-From Buffer to `Readable` stream.
+From `Buffer` to `Readable` stream.
 
 ```ts
 import { readFile } from 'fs/promises';
@@ -121,7 +159,7 @@ const run = async () => {
 run();
 ```
 
-From file to Buffer.
+From file to `Buffer`.
 
 ```ts
 import { readFile } from 'fs/promises';
@@ -204,7 +242,7 @@ const run = async () => {
 run();
 ```
 
-From `Readable` stream to buffer.
+From `Readable` stream to `Buffer`.
 
 ```ts
 import { createReadStream } from 'fs';
