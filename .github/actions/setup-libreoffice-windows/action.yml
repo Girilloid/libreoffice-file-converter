@@ -11,6 +11,6 @@ runs:
       run: winget install --id=TheDocumentFoundation.LibreOffice -e --accept-package-agreements --accept-source-agreements
       shell: pwsh
 
-    - name: Print LibreOffice Version
-      run: libreoffice --version
+    - name: Print LibreOffice version
+      run: soffice --version
       shell: pwsh

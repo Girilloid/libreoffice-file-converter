@@ -8,6 +8,6 @@ runs:
       run: sudo add-apt-repository --yes ppa:libreoffice && sudo apt update && sudo apt install libreoffice -y
       shell: bash
 
-    - name: Print LibreOffice Version
-      run: libreoffice --version
+    - name: Print LibreOffice version
+      run: soffice --version
       shell: bash

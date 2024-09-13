@@ -11,6 +11,6 @@ runs:
       run: brew install --cask libreoffice
       shell: bash
 
-    - name: Print LibreOffice Version
-      run: libreoffice --version
+    - name: Print LibreOffice version
+      run: soffice --version
       shell: bash
