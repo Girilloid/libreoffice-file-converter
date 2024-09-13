@@ -1,5 +1,12 @@
 
 
+## [3.1.0](https://github.com/Girilloid/libreoffice-file-converter/compare/v3.0.2...v3.1.0) (2024-09-13)
+
+
+### Features
+
+* [#8](https://github.com/Girilloid/libreoffice-file-converter/issues/8) Add input filter support ([f700f80](https://github.com/Girilloid/libreoffice-file-converter/commit/f700f80df5b8b58aa52f0f5ebc55200f662b0765))
+
 ## [3.0.2](https://github.com/Girilloid/libreoffice-file-converter/compare/v3.0.1...v3.0.2) (2024-08-30)
 
 
