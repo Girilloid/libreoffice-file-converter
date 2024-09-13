@@ -12,5 +12,5 @@ runs:
       shell: pwsh
 
     - name: Print LibreOffice version
-      run: C:\\Program Files\\LibreOffice\\program\\soffice.exe --version
+      run: '"C:\\Program Files\\LibreOffice\\program\\soffice.exe --version"'
       shell: pwsh
