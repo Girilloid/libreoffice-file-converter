@@ -12,7 +12,7 @@ describe('helpers/fs', () => {
 
       const result = getProcessedFilePath(temporaryDirPath, inputPath, format);
 
-      expect(result).toBe(['tmp', 'libreoffice-file-converter', 'source.pdf'].join(sep));
+      expect(result).toEqual(['tmp', 'libreoffice-file-converter', 'source.pdf'].join(sep));
     });
 
     it('returns correct file path for files outside temporary dir', () => {
@@ -20,7 +20,7 @@ describe('helpers/fs', () => {
 
       const result = getProcessedFilePath(temporaryDirPath, inputPath, format);
 
-      expect(result).toBe(['tmp', 'libreoffice-file-converter', 'source.pdf'].join(sep));
+      expect(result).toEqual(['tmp', 'libreoffice-file-converter', 'source.pdf'].join(sep));
     });
 
     it('returns correct file path for files outside temporary dir with extra dots in file name', () => {
@@ -28,7 +28,7 @@ describe('helpers/fs', () => {
 
       const result = getProcessedFilePath(temporaryDirPath, inputPath, format);
 
-      expect(result).toBe(['tmp', 'libreoffice-file-converter', 'source.to.process.pdf'].join(sep));
+      expect(result).toEqual(['tmp', 'libreoffice-file-converter', 'source.to.process.pdf'].join(sep));
     });
 
     it('returns correct file path for files outside temporary dir without extension', () => {
@@ -36,7 +36,7 @@ describe('helpers/fs', () => {
 
       const result = getProcessedFilePath(temporaryDirPath, inputPath, format);
 
-      expect(result).toBe(['tmp', 'libreoffice-file-converter', 'source.pdf'].join(sep));
+      expect(result).toEqual(['tmp', 'libreoffice-file-converter', 'source.pdf'].join(sep));
     });
   });
 });

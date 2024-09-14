@@ -72,7 +72,7 @@ describe('LibreOfficeFileConverter convert from stream', () => {
       });
     });
 
-    it('throws an error when libreoffice fails to convert file', async (): Promise<void> => {
+    it('throws an error when fails to convert file (pdf to docx without input filter)', async (): Promise<void> => {
       let exception: Error | null = null;
 
       try {
@@ -91,6 +91,35 @@ describe('LibreOfficeFileConverter convert from stream', () => {
       }
 
       assertStringIncludes(exception?.message || '', 'Error');
+    });
+
+    it('converts pdf to docx when input filter is provided', async (): Promise<void> => {
+      let exception;
+
+      try {
+        const inputPath = getInputPath('example.pdf');
+        const outputPath = getOutputPath('example-pdf.docx');
+
+        const inputStream = createReadStream(inputPath);
+
+        const outputBuffer = await libreOfficeFileConverter.convert({
+          format: 'docx',
+          input: 'stream',
+          inputFilter: 'writer_pdf_import',
+          output: 'buffer',
+          stream: inputStream,
+        });
+
+        await writeFile(outputPath, outputBuffer);
+
+        const isExists = await access(outputPath);
+
+        assertEquals(isExists, true);
+      } catch (error) {
+        exception = error;
+      }
+
+      assertEquals(exception, undefined);
     });
   });
 
@@ -127,7 +156,7 @@ describe('LibreOfficeFileConverter convert from stream', () => {
       });
     });
 
-    it('throws an error when libreoffice fails to convert file', async (): Promise<void> => {
+    it('throws an error when fails to convert file (pdf to docx without input filter)', async (): Promise<void> => {
       let exception: Error | null = null;
 
       try {
@@ -148,6 +177,34 @@ describe('LibreOfficeFileConverter convert from stream', () => {
       }
 
       assertStringIncludes(exception?.message || '', 'Error');
+    });
+
+    it('converts pdf to docx when input filter is provided', async (): Promise<void> => {
+      let exception;
+
+      try {
+        const inputPath = getInputPath('example.pdf');
+        const outputPath = getOutputPath('example-pdf.docx');
+
+        const inputStream = createReadStream(inputPath);
+
+        await libreOfficeFileConverter.convert({
+          format: 'docx',
+          input: 'stream',
+          inputFilter: 'writer_pdf_import',
+          output: 'file',
+          outputPath,
+          stream: inputStream,
+        });
+
+        const isExists = await access(outputPath);
+
+        assertEquals(isExists, true);
+      } catch (error) {
+        exception = error;
+      }
+
+      assertEquals(exception, undefined);
     });
   });
 
@@ -185,7 +242,7 @@ describe('LibreOfficeFileConverter convert from stream', () => {
       });
     });
 
-    it('throws an error when libreoffice fails to convert file', async (): Promise<void> => {
+    it('throws an error when fails to convert file (pdf to docx without input filter)', async (): Promise<void> => {
       let exception: Error | null = null;
 
       try {
@@ -204,6 +261,35 @@ describe('LibreOfficeFileConverter convert from stream', () => {
       }
 
       assertStringIncludes(exception?.message || '', 'Error');
+    });
+
+    it('converts pdf to docx when input filter is provided', async (): Promise<void> => {
+      let exception;
+
+      try {
+        const inputPath = getInputPath('example.pdf');
+        const outputPath = getOutputPath('example-pdf.docx');
+
+        const inputStream = createReadStream(inputPath);
+
+        const outputStream = await libreOfficeFileConverter.convert({
+          format: 'docx',
+          input: 'stream',
+          inputFilter: 'writer_pdf_import',
+          output: 'stream',
+          stream: inputStream,
+        });
+
+        await writeStream(outputPath, outputStream);
+
+        const isExists = await access(outputPath);
+
+        assertEquals(isExists, true);
+      } catch (error) {
+        exception = error;
+      }
+
+      assertEquals(exception, undefined);
     });
   });
 });

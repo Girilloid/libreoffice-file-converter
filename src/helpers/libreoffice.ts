@@ -52,12 +52,12 @@ export const getLibreOfficeCommandArgs = (
   inputFilter?: string,
   outputFilter?: string,
 ): readonly string[] => {
-  const filterSegment = outputFilter && outputFilter.length > 0 ? `:"${outputFilter}"` : '';
+  const filterSegment = outputFilter && outputFilter.length > 0 ? `:${outputFilter}` : '';
 
   const args = [`-env:UserInstallation=${pathToFileURL(installationDir).toString()}`, '--headless'];
 
   if (inputFilter && inputFilter.length > 0) {
-    args.push(`--infilter="${inputFilter}"`);
+    args.push(`--infilter=${inputFilter}`);
   }
 
   args.push('--convert-to', `${format}${filterSegment}`, '--outdir', outputDir, inputPath);
