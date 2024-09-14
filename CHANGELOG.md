@@ -1,5 +1,12 @@
 
 
+## [3.1.1](https://github.com/Girilloid/libreoffice-file-converter/compare/v3.1.0...v3.1.1) (2024-09-14)
+
+
+### Bug Fixes
+
+* [#9](https://github.com/Girilloid/libreoffice-file-converter/issues/9) Remove double quotes from args ([6786bb7](https://github.com/Girilloid/libreoffice-file-converter/commit/6786bb7bcc85cc7119fd14ceab511f4a32bf9656))
+
 ## [3.1.0](https://github.com/Girilloid/libreoffice-file-converter/compare/v3.0.2...v3.1.0) (2024-09-13)
 
 
