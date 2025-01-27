@@ -1,4 +1,10 @@
+# Changelog
 
+## [3.2.0](https://github.com/Girilloid/libreoffice-file-converter/compare/v3.1.1...v3.2.0) (2025-01-27)
+
+### Features
+
+* Update type comments and cleanup ([5a7a9db](https://github.com/Girilloid/libreoffice-file-converter/commit/5a7a9db441249beee0228e171ffac43d19bbb592))
 
 ## [3.1.1](https://github.com/Girilloid/libreoffice-file-converter/compare/v3.1.0...v3.1.1) (2024-09-14)
 

@@ -1,6 +1,6 @@
 {
   "name": "@girilloid/libreoffice-file-converter",
-  "version": "3.1.1",
+  "version": "3.2.0",
   "exports": "./src/index.ts",
   "nodeModulesDir": "manual",
   "unstable": [

@@ -1,6 +1,6 @@
 {
   "name": "libreoffice-file-converter",
-  "version": "3.1.1",
+  "version": "3.2.0",
   "description": "Simple NodeJS wrapper for libreoffice CLI for converting office documents to different formats",
   "main": "./dist/index.mjs",
   "module": "./dist/index.mjs",
