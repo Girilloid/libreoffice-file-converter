@@ -2,11 +2,7 @@
   "name": "@girilloid/libreoffice-file-converter",
   "version": "3.1.1",
   "exports": "./src/index.ts",
-  "imports": {
-    "@std/assert": "jsr:@std/assert@1",
-    "@std/testing": "jsr:@std/testing@1",
-    "tmp": "npm:tmp@0.2.3"
-  },
+  "nodeModulesDir": "manual",
   "unstable": [
     "sloppy-imports"
   ]

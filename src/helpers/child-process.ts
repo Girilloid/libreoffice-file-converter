@@ -6,8 +6,12 @@ import { inspect } from 'node:util';
 
 import { hasLibreOfficeError } from './libreoffice';
 
+const isBuffer = (value: unknown): value is Buffer => {
+  return Buffer.isBuffer(value);
+};
+
 const processOutputToString = (processOutput: string | Buffer): string => {
-  return processOutput instanceof Buffer ? processOutput.toString('utf-8') : processOutput;
+  return isBuffer(processOutput) ? processOutput.toString('utf-8') : processOutput;
 };
 
 export const execFileAsync = (

@@ -18,9 +18,9 @@ jobs:
         uses: ./.github/actions/setup-libreoffice-darwin
 
       - name: Setup Deno
-        uses: denoland/setup-deno@v1
+        uses: denoland/setup-deno@v2
         with:
-          deno-version: 1.46.3
+          deno-version: 2.*
 
       - name: Test package
         uses: ./.github/actions/test-deno

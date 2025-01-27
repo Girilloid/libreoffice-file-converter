@@ -1,4 +1,4 @@
-bun 1.1.27
-deno 1.46.3
-nodejs 20.17.0
+bun 1.2.0
+deno 2.1.7
+nodejs 22.13.1
 yarn 1.22.22

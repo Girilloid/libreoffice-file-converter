@@ -4,6 +4,14 @@ description: Tests package with Deno
 runs:
   using: composite
   steps:
+    - name: Install dependencies
+      run: deno install
+      shell: bash
+
+    - name: Build package
+      run: deno run build
+      shell: bash
+
     - name: Test package
       run: deno test --allow-all
       shell: bash

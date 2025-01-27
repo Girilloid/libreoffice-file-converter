@@ -1,7 +1,7 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 
-import { assertEquals, assertStringIncludes } from '@std/assert';
-import { afterEach, beforeAll, describe, it } from '@std/testing/bdd';
+import { assertEquals, assertStringIncludes } from 'jsr:@std/assert';
+import { afterEach, beforeAll, describe, it } from 'jsr:@std/testing/bdd';
 
 import { writeStream } from '../src/helpers/fs';
 import { LibreOfficeFileConverter } from '../src/libreoffice-file-converter';
