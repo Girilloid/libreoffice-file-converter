@@ -151,21 +151,11 @@ export class LibreOfficeFileConverter {
       ...tmpOptions,
     });
 
-    try {
-      const inputPath = await this.write(options, temporaryDir.path);
+    const inputPath = await this.write(options, temporaryDir.path);
 
-      await this.process(inputPath, temporaryDir.path, format, inputFilter || filter, outputFilter, mergedOptions);
+    await this.process(inputPath, temporaryDir.path, format, inputFilter || filter, outputFilter, mergedOptions);
 
-      const result = await this.read(options, temporaryDir.path, inputPath);
-
-      temporaryDir.cleanup();
-
-      return result;
-    } catch (error) {
-      await temporaryDir.cleanup();
-
-      throw error;
-    }
+    return this.read(options, temporaryDir.path, inputPath);
   }
 
   private mergeOptions(options: LibreOfficeFileConverterOptions = {}): LibreOfficeFileConverterOptions {
@@ -199,15 +189,7 @@ export class LibreOfficeFileConverter {
       outputFilter,
     );
 
-    try {
-      await execFileAsync(libreOfficeExecutablePath, libreOfficeCommandArgs, childProcessOptions, debug);
-
-      installationDir.cleanup();
-    } catch (error) {
-      await installationDir.cleanup();
-
-      throw error;
-    }
+    await execFileAsync(libreOfficeExecutablePath, libreOfficeCommandArgs, childProcessOptions, debug);
   }
 
   private async read(

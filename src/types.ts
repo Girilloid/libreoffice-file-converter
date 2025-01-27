@@ -3,6 +3,9 @@ import type { Buffer } from 'node:buffer';
 import type { Readable } from 'node:stream';
 import type { DirOptions } from 'tmp';
 
+/**
+ * LibreOfficeFileConverter options.
+ */
 export type LibreOfficeFileConverterOptions = {
   /**
    * List of paths to soffice binary.
@@ -25,15 +28,18 @@ export type LibreOfficeFileConverterOptions = {
   readonly tmpOptions?: DirOptions;
 };
 
+/**
+ * Convert input options.
+ */
 export type ConvertInputOptions =
   | {
       /**
-       * Input buffer.
+       * Input Buffer.
        */
       readonly buffer: Buffer;
 
       /**
-       * Input as a buffer.
+       * Input as a Buffer.
        */
       readonly input: 'buffer';
     }
@@ -60,13 +66,19 @@ export type ConvertInputOptions =
       readonly stream: Readable;
     };
 
+/**
+ * Convert output options.
+ */
 export type ConvertOutputOptionsBuffer = {
   /**
-   * Return conversion result as a buffer.
+   * Return conversion result as a Buffer.
    */
   readonly output: 'buffer';
 };
 
+/**
+ * Convert output options.
+ */
 export type ConvertOutputOptionsFile = {
   /**
    * Save conversion result as a file.
@@ -79,6 +91,9 @@ export type ConvertOutputOptionsFile = {
   readonly outputPath: string;
 };
 
+/**
+ * Convert output options.
+ */
 export type ConvertOutputOptionsStream = {
   /**
    * Return conversion result as a readable stream.
@@ -86,8 +101,14 @@ export type ConvertOutputOptionsStream = {
   readonly output: 'stream';
 };
 
+/**
+ * Convert output options.
+ */
 export type ConvertOutputOptions = ConvertOutputOptionsBuffer | ConvertOutputOptionsFile | ConvertOutputOptionsStream;
 
+/**
+ * Convert options.
+ */
 export type ConvertOptionsInput = ConvertInputOptions & {
   /**
    * LibreOffice output filter.
@@ -120,4 +141,7 @@ export type ConvertOptionsInput = ConvertInputOptions & {
   readonly outputFilter?: string;
 };
 
+/**
+ * Convert options.
+ */
 export type ConvertOptions = ConvertOptionsInput & ConvertOutputOptions;
