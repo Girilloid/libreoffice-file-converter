@@ -20,6 +20,12 @@ export const execFileAsync = (
   options?: ExecFileOptions,
   debug?: boolean,
 ): Promise<void> => {
+  let startTime: number;
+
+  if (debug) {
+    startTime = performance.now();
+  }
+
   return new Promise((resolve, reject) => {
     execFile(path, args, options, (error, stdout, stderr) => {
       const stderrString = processOutputToString(stderr);
@@ -29,6 +35,7 @@ export const execFileAsync = (
         const debugInfo = inspect(
           {
             args,
+            executionTime: performance.now() - startTime,
             path,
             stderr: stderrString,
             stdout: stdoutString,
