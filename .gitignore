@@ -4,6 +4,8 @@ coverage
 
 deno.lock
 
-test/resources/output-from-buffer
-test/resources/output-from-file
-test/resources/output-from-stream
+tests/resources/installation-dir
+tests/resources/output
+tests/resources/output-buffer
+tests/resources/output-file
+tests/resources/output-stream
