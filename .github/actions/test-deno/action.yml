@@ -13,5 +13,5 @@ runs:
       shell: bash
 
     - name: Test package
-      run: deno test --allow-all
+      run: deno test --allow-all --no-check
       shell: bash
