@@ -10,7 +10,7 @@
     "importHelpers": true,
     "isolatedModules": true,
     "lib": ["ES2016", "ES2017.Object", "ESNext.AsyncIterable"],
-    "module": "CommonJS",
+    "module": "esnext",
     "moduleResolution": "node",
     "noEmitHelpers": true,
     "noUnusedLocals": true,
@@ -22,5 +22,5 @@
     "sourceMap": false,
     "strict": true,
     "target": "ES6"
-  },
+  }
 }
