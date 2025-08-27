@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.3.0](https://github.com/Girilloid/libreoffice-file-converter/compare/v3.2.0...v3.3.0) (2025-08-27)
+
+### Features
+
+* Custom LibreOffice installation dir option. Method to initialize LibreOffice installation dir ([9a345bb](https://github.com/Girilloid/libreoffice-file-converter/commit/9a345bb83fac0140f04bb29961ede4f7ed60236b))
+* Print execution time in debug ([26472b5](https://github.com/Girilloid/libreoffice-file-converter/commit/26472b5cd5986a7985e375ee84f5414d063211af))
+
 ## [3.2.0](https://github.com/Girilloid/libreoffice-file-converter/compare/v3.1.1...v3.2.0) (2025-01-27)
 
 ### Features
