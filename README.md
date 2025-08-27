@@ -24,6 +24,14 @@ Array of paths to LibreOffice binary executables.
 
 Enables debug output for LibreOffice command execution.
 
+#### `options.installationDir`
+
+User installation (profile) directory for LibreOffice.
+
+- `default` - Uses the default user installation directory.
+- `dynamic` - Creates a temporary user installation directory for each conversion process. Used by default.
+- string - Specifies a custom path for the user installation directory.
+
 #### `options.tmpOptions`
 
 `tmp.DirOptions` object. Can be used to configure behavior of `tmp` package, which is used to create temporary folders for LibreOffice data.
@@ -68,7 +76,7 @@ Deprecated, use `outputFilter` instead.
 
 Overrides for LibreOfficeFileConverter instance options.
 
-### Examples
+#### Examples
 
 From `Buffer` to `Buffer`.
 
@@ -326,6 +334,39 @@ const run = async () => {
     output: 'stream',
     stream: inputStream,
   })
+};
+
+run();
+```
+
+### `LibreOfficeFileConverter.init`
+
+Initializes LibreOffice installation dir by starting executable in headless mode and then terminating it.
+
+#### `installationDir`
+
+Path for the user installation directory.
+
+#### `options`
+
+Overrides for LibreOfficeFileConverter instance options.
+
+#### Examples
+
+```ts
+import { join } from 'path';
+import { LibreOfficeFileConverter } from 'libreoffice-file-converter';
+
+const installationDir = join(__dirname, './installation-dir');
+
+const run = async () => {
+  const libreOfficeFileConverter = new LibreOfficeFileConverter({
+    childProcessOptions: {
+      timeout: 60 * 1000,
+    },
+  });
+
+  await libreOfficeFileConverter.init({ installationDir })
 };
 
 run();

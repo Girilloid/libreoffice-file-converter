@@ -44,7 +44,19 @@ export const getLibreOfficeExecutablePath = async (binaryPaths: readonly string[
   return path;
 };
 
-export const getLibreOfficeCommandArgs = (
+export const getLibreOfficeInitCommandArgs = (installationDir: string): readonly string[] => {
+  const args: string[] = [];
+
+  if (installationDir && installationDir.length > 0) {
+    args.push(`-env:UserInstallation=${pathToFileURL(installationDir).toString()}`);
+  }
+
+  args.push('--headless', '--terminate_after_init');
+
+  return args;
+};
+
+export const getLibreOfficeConvertCommandArgs = (
   installationDir: string,
   inputPath: string,
   outputDir: string,
@@ -54,7 +66,13 @@ export const getLibreOfficeCommandArgs = (
 ): readonly string[] => {
   const filterSegment = outputFilter && outputFilter.length > 0 ? `:${outputFilter}` : '';
 
-  const args = [`-env:UserInstallation=${pathToFileURL(installationDir).toString()}`, '--headless'];
+  const args: string[] = [];
+
+  if (installationDir && installationDir.length > 0) {
+    args.push(`-env:UserInstallation=${pathToFileURL(installationDir).toString()}`);
+  }
+
+  args.push('--headless');
 
   if (inputFilter && inputFilter.length > 0) {
     args.push(`--infilter=${inputFilter}`);

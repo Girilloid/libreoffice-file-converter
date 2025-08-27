@@ -1,4 +1,4 @@
-import { access as fsAccess, readdir, unlink } from 'node:fs/promises';
+import { access as fsAccess, readdir, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 
 export const access = async (path: string): Promise<boolean> => {
@@ -16,9 +16,15 @@ export const clearDir = async (path: string): Promise<void> => {
 
   await Promise.all(
     files.map((file) => {
-      return unlink(join(path, file));
+      return rm(join(path, file), { recursive: true });
     }),
   );
+};
+
+export const getFilesCount = async (path: string): Promise<number> => {
+  const files = await readdir(path);
+
+  return files.length;
 };
 
 export const getInputPath = (fileName: string): string => {

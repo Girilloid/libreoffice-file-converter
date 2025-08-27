@@ -23,10 +23,28 @@ export type LibreOfficeFileConverterOptions = {
   readonly debug?: boolean;
 
   /**
+   * User installation (profile) directory for LibreOffice.
+   *
+   * - `default` - Uses the default user installation directory.
+   * - `dynamic` - Creates a temporary user installation directory for each conversion process.
+   * - string - Specifies a custom path for the user installation directory.
+   */
+  readonly installationDir?: InstallationDir;
+
+  /**
    * tmp-promise options.
    */
   readonly tmpOptions?: DirOptions;
 };
+
+/**
+ * User installation (profile) directory for LibreOffice.
+ *
+ * - `default` - Uses the default user installation directory.
+ * - `dynamic` - Creates a temporary user installation directory for each conversion process.
+ * - string - Specifies a custom path for the user installation directory.
+ */
+export type InstallationDir = 'default' | 'dynamic' | (string & {});
 
 /**
  * Convert input options.
@@ -112,7 +130,7 @@ export type ConvertOutputOptions = ConvertOutputOptionsBuffer | ConvertOutputOpt
 export type ConvertOptionsInput = ConvertInputOptions & {
   /**
    * LibreOffice output filter.
-   * See LibreOffice docs https://help.libreoffice.org/latest/en-US/text/shared/guide/convertfilters.html
+   * See LibreOffice [docs](https://help.libreoffice.org/latest/en-US/text/shared/guide/convertfilters.html)
    *
    * @deprecated Use `outputFilter` instead.
    */
@@ -125,7 +143,7 @@ export type ConvertOptionsInput = ConvertInputOptions & {
 
   /**
    * LibreOffice input filter.
-   * See LibreOffice docs https://help.libreoffice.org/latest/en-US/text/shared/guide/convertfilters.html
+   * See LibreOffice [docs](https://help.libreoffice.org/latest/en-US/text/shared/guide/convertfilters.html)
    */
   readonly inputFilter?: string;
 
@@ -136,7 +154,7 @@ export type ConvertOptionsInput = ConvertInputOptions & {
 
   /**
    * LibreOffice output filter.
-   * See LibreOffice docs https://help.libreoffice.org/latest/en-US/text/shared/guide/convertfilters.html
+   * See LibreOffice [docs](https://help.libreoffice.org/latest/en-US/text/shared/guide/convertfilters.html)
    */
   readonly outputFilter?: string;
 };
@@ -145,3 +163,18 @@ export type ConvertOptionsInput = ConvertInputOptions & {
  * Convert options.
  */
 export type ConvertOptions = ConvertOptionsInput & ConvertOutputOptions;
+
+/**
+ * Init options.
+ */
+export type InitOptions = {
+  /**
+   * User installation (profile) directory for LibreOffice.
+   */
+  readonly installationDir: string;
+
+  /**
+   * LibreOfficeConverter options.
+   */
+  readonly options?: LibreOfficeFileConverterOptions;
+};

@@ -7,8 +7,9 @@ import { dir, setGracefulCleanup } from 'tmp-promise';
 import {
   deepMerge,
   execFileAsync,
-  getLibreOfficeCommandArgs,
+  getLibreOfficeConvertCommandArgs,
   getLibreOfficeExecutablePath,
+  getLibreOfficeInitCommandArgs,
   getProcessedFilePath,
   getTemporaryFilePath,
   writeStream,
@@ -19,6 +20,8 @@ import type {
   ConvertOutputOptionsBuffer,
   ConvertOutputOptionsFile,
   ConvertOutputOptionsStream,
+  InitOptions,
+  InstallationDir,
   LibreOfficeFileConverterOptions,
 } from './types';
 
@@ -158,6 +161,54 @@ export class LibreOfficeFileConverter {
     return this.read(options, temporaryDir.path, inputPath);
   }
 
+  /**
+   * Initializes LibreOffice installation dir by starting executable in headless mode and then terminating it.
+   *
+   * @example
+   * ```ts
+   * await libreOfficeFileConverter.init({ installationDir: '/home/user/custom-soffice-profile' });
+   * ```
+   *
+   * @param options Init options.
+   *
+   * @public
+   */
+  public async init(options: InitOptions): Promise<void> {
+    const { installationDir, options: callOptions = {} } = options;
+
+    const mergedOptions = this.mergeOptions(callOptions);
+    const { binaryPaths, childProcessOptions, debug } = mergedOptions;
+
+    const libreOfficeExecutablePath = await getLibreOfficeExecutablePath(binaryPaths);
+
+    const libreOfficeCommandArgs = getLibreOfficeInitCommandArgs(installationDir);
+
+    await execFileAsync(libreOfficeExecutablePath, libreOfficeCommandArgs, childProcessOptions, debug);
+  }
+
+  private async getInstallationDir(
+    installationDir: InstallationDir = 'dynamic',
+    options: LibreOfficeFileConverterOptions = {},
+  ): Promise<string> {
+    if (installationDir === 'default') {
+      return '';
+    }
+
+    if (installationDir === 'dynamic') {
+      const { tmpOptions } = options;
+
+      const temporaryDir = await dir({
+        prefix: 'soffice',
+        unsafeCleanup: true,
+        ...tmpOptions,
+      });
+
+      return temporaryDir.path;
+    }
+
+    return installationDir;
+  }
+
   private mergeOptions(options: LibreOfficeFileConverterOptions = {}): LibreOfficeFileConverterOptions {
     return deepMerge(this._options, options);
   }
@@ -170,18 +221,14 @@ export class LibreOfficeFileConverter {
     outputFilter?: string,
     options: LibreOfficeFileConverterOptions = {},
   ): Promise<void> {
-    const { binaryPaths, childProcessOptions, debug, tmpOptions } = options;
+    const { binaryPaths, childProcessOptions, debug } = options;
 
     const libreOfficeExecutablePath = await getLibreOfficeExecutablePath(binaryPaths);
 
-    const installationDir = await dir({
-      prefix: 'soffice',
-      unsafeCleanup: true,
-      ...tmpOptions,
-    });
+    const installationDir = await this.getInstallationDir(options.installationDir, options);
 
-    const libreOfficeCommandArgs = getLibreOfficeCommandArgs(
-      installationDir.path,
+    const libreOfficeCommandArgs = getLibreOfficeConvertCommandArgs(
+      installationDir,
       inputPath,
       outputDir,
       format,
