@@ -6,7 +6,7 @@ rmSync('tests/dist/tests', {
   recursive: true,
 });
 
-const tsc = spawnSync(process.execPath, ['node_modules/typescript/lib/tsc.js', '-p', 'tsconfig.test.json'], {
+const tsc = spawnSync('node', ['node_modules/typescript/lib/tsc.js', '-p', 'tsconfig.test.json'], {
   stdio: 'inherit',
 });
 
@@ -22,16 +22,16 @@ const files = readdirSync(dir)
   .map((file) => `${dir}/${file}`);
 
 const supportsConcurrencyFlag =
-  spawnSync(process.execPath, ['--test', '--test-concurrency=1', '--help'], { stdio: 'ignore' }).status === 0;
+  spawnSync('node', ['--test', '--test-concurrency=1', '--help'], { stdio: 'ignore' }).status === 0;
 
 if (supportsConcurrencyFlag) {
-  const { status } = spawnSync(process.execPath, ['--test', '--test-concurrency=1', ...files], { stdio: 'inherit' });
+  const { status } = spawnSync('node', ['--test', '--test-concurrency=1', ...files], { stdio: 'inherit' });
 
   process.exit(status ?? 1);
 }
 
 for (const file of files) {
-  const { status } = spawnSync(process.execPath, ['--test', file], { stdio: 'inherit' });
+  const { status } = spawnSync('node', ['--test', file], { stdio: 'inherit' });
 
   if (status !== 0) {
     process.exit(status ?? 1);

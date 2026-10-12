@@ -25,7 +25,7 @@
     "prepare": "husky",
     "release": "release-it",
     "release:preview": "release-it --dry-run",
-    "test": "node scripts/run-node-tests.mjs",
+    "test": "bun scripts/run-node-tests.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
