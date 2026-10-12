@@ -8,10 +8,6 @@ runs:
       run: deno install
       shell: bash
 
-    - name: Build package
-      run: deno run build
-      shell: bash
-
     - name: Test package
-      run: deno test --allow-all --no-check
+      run: deno test --allow-all
       shell: bash

@@ -1,13 +1,11 @@
+import assert from 'node:assert/strict';
 import { createReadStream } from 'node:fs';
 import { mkdir, writeFile } from 'node:fs/promises';
-
-import { assertEquals, assertStringIncludes } from '@std/assert';
-import { afterEach, beforeAll, describe, it } from '@std/testing/bdd';
+import { afterEach, before, describe, it } from 'node:test';
 
 import { writeStream } from '../src/helpers/fs';
 import { LibreOfficeFileConverter } from '../src/libreoffice-file-converter';
-import { access, clearDir, formats, outputFormat, timeout } from './helpers';
-import { getInputPath, getOutputPathFactory } from './helpers-deno';
+import { access, clearDir, formats, getInputPath, getOutputPathFactory, outputFormat, timeout } from './helpers';
 
 const getOutputPath = getOutputPathFactory('output-stream');
 
@@ -16,7 +14,7 @@ const outputDir = getOutputPath('');
 describe('LibreOfficeFileConverter convert from stream', () => {
   let libreOfficeFileConverter: LibreOfficeFileConverter;
 
-  beforeAll(async () => {
+  before(async () => {
     const isExists = await access(outputDir);
 
     if (!isExists) {
@@ -62,12 +60,12 @@ describe('LibreOfficeFileConverter convert from stream', () => {
 
           const isExists = await access(outputPath);
 
-          assertEquals(isExists, true);
+          assert.equal(isExists, true);
         } catch (error) {
           exception = error;
         }
 
-        assertEquals(exception, undefined);
+        assert.equal(exception, undefined);
       });
     });
 
@@ -89,7 +87,7 @@ describe('LibreOfficeFileConverter convert from stream', () => {
         exception = error as Error;
       }
 
-      assertStringIncludes(exception?.message || '', 'Error');
+      assert.ok((exception?.message || '').includes('Error'));
     });
 
     it('converts pdf to docx when input filter is provided', async (): Promise<void> => {
@@ -113,12 +111,12 @@ describe('LibreOfficeFileConverter convert from stream', () => {
 
         const isExists = await access(outputPath);
 
-        assertEquals(isExists, true);
+        assert.equal(isExists, true);
       } catch (error) {
         exception = error;
       }
 
-      assertEquals(exception, undefined);
+      assert.equal(exception, undefined);
     });
   });
 
@@ -146,12 +144,12 @@ describe('LibreOfficeFileConverter convert from stream', () => {
 
           const isExists = await access(outputPath);
 
-          assertEquals(isExists, true);
+          assert.equal(isExists, true);
         } catch (error) {
           exception = error;
         }
 
-        assertEquals(exception, undefined);
+        assert.equal(exception, undefined);
       });
     });
 
@@ -175,7 +173,7 @@ describe('LibreOfficeFileConverter convert from stream', () => {
         exception = error as Error;
       }
 
-      assertStringIncludes(exception?.message || '', 'Error');
+      assert.ok((exception?.message || '').includes('Error'));
     });
 
     it('converts pdf to docx when input filter is provided', async (): Promise<void> => {
@@ -198,12 +196,12 @@ describe('LibreOfficeFileConverter convert from stream', () => {
 
         const isExists = await access(outputPath);
 
-        assertEquals(isExists, true);
+        assert.equal(isExists, true);
       } catch (error) {
         exception = error;
       }
 
-      assertEquals(exception, undefined);
+      assert.equal(exception, undefined);
     });
   });
 
@@ -232,12 +230,12 @@ describe('LibreOfficeFileConverter convert from stream', () => {
 
           const isExists = await access(outputPath);
 
-          assertEquals(isExists, true);
+          assert.equal(isExists, true);
         } catch (error) {
           exception = error;
         }
 
-        assertEquals(exception, undefined);
+        assert.equal(exception, undefined);
       });
     });
 
@@ -259,7 +257,7 @@ describe('LibreOfficeFileConverter convert from stream', () => {
         exception = error as Error;
       }
 
-      assertStringIncludes(exception?.message || '', 'Error');
+      assert.ok((exception?.message || '').includes('Error'));
     });
 
     it('converts pdf to docx when input filter is provided', async (): Promise<void> => {
@@ -283,12 +281,12 @@ describe('LibreOfficeFileConverter convert from stream', () => {
 
         const isExists = await access(outputPath);
 
-        assertEquals(isExists, true);
+        assert.equal(isExists, true);
       } catch (error) {
         exception = error;
       }
 
-      assertEquals(exception, undefined);
+      assert.equal(exception, undefined);
     });
   });
 });

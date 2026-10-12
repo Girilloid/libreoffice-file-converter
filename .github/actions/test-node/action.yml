@@ -8,10 +8,6 @@ runs:
       run: bun install --frozen-lockfile
       shell: bash
 
-    - name: Build package
-      run: bun run build
-      shell: bash
-
     - name: Test package
-      run: bun run test --maxWorkers=1
+      run: bun run test
       shell: bash

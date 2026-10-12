@@ -1,12 +1,10 @@
+import assert from 'node:assert/strict';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
-
-import { assertEquals, assertGreater } from '@std/assert';
-import { afterEach, beforeAll, describe, it } from '@std/testing/bdd';
+import { afterEach, before, describe, it } from 'node:test';
 
 import { LibreOfficeFileConverter } from '../src/libreoffice-file-converter';
 import type { InstallationDir } from '../src/types';
-import { access, clearDir, getFilesCount, timeout } from './helpers';
-import { getInputPath, getOutputPathFactory } from './helpers-deno';
+import { access, clearDir, getFilesCount, getInputPath, getOutputPathFactory, timeout } from './helpers';
 
 const getInstallationDirPath = getOutputPathFactory('installation-dir');
 const getOutputPath = getOutputPathFactory('output-buffer');
@@ -17,7 +15,7 @@ const outputDir = getOutputPath('');
 describe('LibreOfficeFileConverter', () => {
   let libreOfficeFileConverter: LibreOfficeFileConverter;
 
-  beforeAll(async () => {
+  before(async () => {
     const isInstallationDirExists = await access(installationDir);
     const isOutputDirExists = await access(outputDir);
 
@@ -71,12 +69,12 @@ describe('LibreOfficeFileConverter', () => {
 
         const isExists = await access(outputPath);
 
-        assertEquals(isExists, true);
+        assert.equal(isExists, true);
       } catch (error) {
         exception = error;
       }
 
-      assertEquals(exception, undefined);
+      assert.equal(exception, undefined);
     };
 
     it('converts file with default installation dir', async () => {
@@ -101,12 +99,12 @@ describe('LibreOfficeFileConverter', () => {
 
         const filesCount = await getFilesCount(installationDir);
 
-        assertGreater(filesCount, 0);
+        assert.ok(filesCount > 0);
       } catch (error) {
         exception = error;
       }
 
-      assertEquals(exception, undefined);
+      assert.equal(exception, undefined);
     });
   });
 });

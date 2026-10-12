@@ -1,6 +1,5 @@
 node_modules
-dist
-coverage
+/dist
 
 tests/resources/installation-dir
 tests/resources/output
@@ -8,4 +7,7 @@ tests/resources/output-buffer
 tests/resources/output-file
 tests/resources/output-stream
 
-.zed/
+tests/dist/*
+!tests/dist/package.json
+
+.zed/*

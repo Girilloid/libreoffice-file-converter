@@ -1,7 +1,6 @@
+import assert from 'node:assert/strict';
 import { sep } from 'node:path';
-
-import { assertEquals } from '@std/assert';
-import { describe, it } from '@std/testing/bdd';
+import { describe, it } from 'node:test';
 
 import { getProcessedFilePath } from '../src/helpers/fs';
 
@@ -15,7 +14,7 @@ describe('helpers/fs', () => {
 
       const result = getProcessedFilePath(temporaryDirPath, inputPath, format);
 
-      assertEquals(result, ['tmp', 'libreoffice-file-converter', 'source.pdf'].join(sep));
+      assert.equal(result, ['tmp', 'libreoffice-file-converter', 'source.pdf'].join(sep));
     });
 
     it('returns correct file path for files outside temporary dir', () => {
@@ -23,7 +22,7 @@ describe('helpers/fs', () => {
 
       const result = getProcessedFilePath(temporaryDirPath, inputPath, format);
 
-      assertEquals(result, ['tmp', 'libreoffice-file-converter', 'source.pdf'].join(sep));
+      assert.equal(result, ['tmp', 'libreoffice-file-converter', 'source.pdf'].join(sep));
     });
 
     it('returns correct file path for files outside temporary dir with extra dots in file name', () => {
@@ -31,7 +30,7 @@ describe('helpers/fs', () => {
 
       const result = getProcessedFilePath(temporaryDirPath, inputPath, format);
 
-      assertEquals(result, ['tmp', 'libreoffice-file-converter', 'source.to.process.pdf'].join(sep));
+      assert.equal(result, ['tmp', 'libreoffice-file-converter', 'source.to.process.pdf'].join(sep));
     });
 
     it('returns correct file path for files outside temporary dir without extension', () => {
@@ -39,7 +38,7 @@ describe('helpers/fs', () => {
 
       const result = getProcessedFilePath(temporaryDirPath, inputPath, format);
 
-      assertEquals(result, ['tmp', 'libreoffice-file-converter', 'source.pdf'].join(sep));
+      assert.equal(result, ['tmp', 'libreoffice-file-converter', 'source.pdf'].join(sep));
     });
   });
 });

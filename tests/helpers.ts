@@ -27,13 +27,15 @@ export const getFilesCount = async (path: string): Promise<number> => {
   return files.length;
 };
 
+const testsResourcesDir = join(process.cwd(), 'tests', 'resources');
+
 export const getInputPath = (fileName: string): string => {
-  return join(__dirname, 'resources', fileName);
+  return join(testsResourcesDir, fileName);
 };
 
 export const getOutputPathFactory = (outputDir: string) => {
   return (fileName: string): string => {
-    return join(__dirname, `resources/${outputDir}`, fileName);
+    return join(testsResourcesDir, outputDir, fileName);
   };
 };
 

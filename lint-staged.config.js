@@ -1,3 +1,3 @@
 export default {
-  '*.ts': ['oxfmt', 'oxlint --fix', () => 'tsc --project tsconfig.typecheck.json --noEmit'],
+  '*.ts': ['oxfmt', 'oxlint --fix', () => 'tsc --noEmit'],
 };

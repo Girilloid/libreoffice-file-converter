@@ -9,6 +9,7 @@ on:
 jobs:
   test-deno-windows:
     runs-on: windows-latest
+    timeout-minutes: 20
 
     steps:
       - name: Checkout repository

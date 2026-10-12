@@ -9,6 +9,7 @@ on:
 jobs:
   test-deno-darwin:
     runs-on: macos-latest
+    timeout-minutes: 20
 
     steps:
       - name: Checkout repository

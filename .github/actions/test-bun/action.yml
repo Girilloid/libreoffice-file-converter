@@ -8,10 +8,6 @@ runs:
       run: bun install --frozen-lockfile
       shell: bash
 
-    - name: Build package
-      run: bun run build
-      shell: bash
-
     - name: Test package
-      run: bun test --timeout 15000 ./tests/*.spec.ts
+      run: bun test --timeout 15000
       shell: bash
