@@ -2,8 +2,6 @@ node_modules
 dist
 coverage
 
-deno.lock
-
 tests/resources/installation-dir
 tests/resources/output
 tests/resources/output-buffer

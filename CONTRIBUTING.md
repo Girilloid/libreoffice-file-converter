@@ -24,7 +24,7 @@ Pick a good branch name. Try something that summarizes what you're doing in a de
 
 ### 4. Install Dependencies
 
-Make sure that before you start writing code you run `mise` or `asdf` at the root of the repo in order to make sure that all tools are installed. Alternatively use any Bun version. Run `bun install --frozen-lockfile` at the root of the repo to ensure that all githooks are registered and packages are installed.
+Make sure that before you start writing code you run `mise` at the root of the repo in order to make sure that all tools are installed. Alternatively use any Bun version. Run `bun install --frozen-lockfile` at the root of the repo to ensure that all githooks are registered and packages are installed.
 
 ### 5. Make your change
 
