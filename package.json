@@ -72,6 +72,7 @@
   },
   "homepage": "https://github.com/Girilloid/libreoffice-file-converter#readme",
   "license": "MIT",
+  "packageManager": "bun@1.4.3",
   "engines": {
     "node": ">=16"
   },

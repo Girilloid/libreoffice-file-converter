@@ -7,6 +7,7 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
+    "ignoreDeprecations": "6.0",
     "importHelpers": true,
     "isolatedModules": true,
     "lib": ["ES2016", "ES2017.Object", "ESNext.AsyncIterable"],
@@ -18,9 +19,11 @@
     "outDir": "./dist",
     "pretty": true,
     "removeComments": false,
+    "rootDir": ".",
     "skipLibCheck": true,
     "sourceMap": false,
     "strict": true,
-    "target": "ES6"
-  }
+    "target": "ES6",
+    "types": ["node"],
+  },
 }

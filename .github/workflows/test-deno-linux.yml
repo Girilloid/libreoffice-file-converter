@@ -20,7 +20,7 @@ jobs:
       - name: Setup Deno
         uses: denoland/setup-deno@v2
         with:
-          deno-version: 2.*
+          deno-version: 2.9.7
 
       - name: Test package
         uses: ./.github/actions/test-deno

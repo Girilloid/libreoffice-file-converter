@@ -5,7 +5,7 @@ runs:
   using: composite
   steps:
     - name: Setup Homebrew
-      uses: Homebrew/actions/setup-homebrew@master
+      uses: Homebrew/actions/setup-homebrew@main
 
     - name: Install LibreOffice
       run: brew install --cask libreoffice
