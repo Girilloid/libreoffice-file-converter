@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   parserPreset: 'conventional-changelog-conventionalcommits',
   rules: {
     'subject-case': [0],
