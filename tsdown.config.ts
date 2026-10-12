@@ -2,7 +2,7 @@ import { defineConfig } from 'tsdown';
 
 export default defineConfig({
   clean: true,
-  dts: { resolver: 'tsc' },
+  dts: true,
   entry: ['src/index.ts'],
   exports: { inlinedDependencies: false },
   format: ['cjs', 'esm'],

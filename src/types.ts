@@ -1,6 +1,7 @@
-import type { ExecFileOptions } from 'node:child_process';
 import type { Buffer } from 'node:buffer';
+import type { ExecFileOptions } from 'node:child_process';
 import type { Readable } from 'node:stream';
+
 import type { DirOptions } from 'tmp';
 
 /**

@@ -2,7 +2,6 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 
 import { LibreOfficeFileConverter } from '../src/libreoffice-file-converter';
 import type { InstallationDir } from '../src/types';
-
 import { access, clearDir, getFilesCount, getInputPath, getOutputPathFactory, timeout } from './helpers';
 
 const getInstallationDirPath = getOutputPathFactory('installation-dir');

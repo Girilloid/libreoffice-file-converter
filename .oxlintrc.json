@@ -1,0 +1,37 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["import", "typescript", "unicorn", "oxc"],
+  "env": { "node": true },
+  "ignorePatterns": ["dist", "coverage"],
+  "rules": {
+    "import/export": "error",
+    "import/first": "error",
+    "import/no-cycle": "error",
+    "import/no-duplicates": "error",
+    "import/no-mutable-exports": "warn",
+    "max-classes-per-file": ["error", 1],
+    "no-console": ["error", { "allow": ["error"] }],
+    "no-empty-pattern": "warn",
+    "no-unused-vars": [
+      "warn",
+      { "args": "after-used", "argsIgnorePattern": "^_", "vars": "all", "varsIgnorePattern": "^_" }
+    ],
+    "object-shorthand": "error",
+    "sort-keys": ["warn", "asc", { "allowLineSeparatedGroups": true, "caseSensitive": false }],
+    "typescript/ban-ts-comment": ["error", { "ts-expect-error": false }],
+    "typescript/class-literal-property-style": ["error", "fields"],
+    "typescript/consistent-generic-constructors": ["error", "constructor"],
+    "typescript/consistent-indexed-object-style": ["error", "record"],
+    "typescript/consistent-type-definitions": ["error", "type"],
+    "typescript/consistent-type-imports": [
+      "warn",
+      { "fixStyle": "separate-type-imports", "prefer": "type-imports" }
+    ],
+    "typescript/explicit-member-accessibility": [
+      "error",
+      { "accessibility": "explicit", "overrides": { "constructors": "no-public" } }
+    ],
+    "typescript/explicit-module-boundary-types": "warn",
+    "typescript/no-explicit-any": "warn"
+  }
+}

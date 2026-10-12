@@ -3,7 +3,6 @@ import { mkdir, writeFile } from 'node:fs/promises';
 
 import { writeStream } from '../src/helpers/fs';
 import { LibreOfficeFileConverter } from '../src/libreoffice-file-converter';
-
 import { access, clearDir, formats, getInputPath, getOutputPathFactory, outputFormat, timeout } from './helpers';
 
 const getOutputPath = getOutputPathFactory('output-stream');

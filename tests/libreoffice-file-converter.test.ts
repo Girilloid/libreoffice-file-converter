@@ -5,7 +5,6 @@ import { afterEach, beforeAll, describe, it } from '@std/testing/bdd';
 
 import { LibreOfficeFileConverter } from '../src/libreoffice-file-converter';
 import type { InstallationDir } from '../src/types';
-
 import { access, clearDir, getFilesCount, timeout } from './helpers';
 import { getInputPath, getOutputPathFactory } from './helpers-deno';
 
