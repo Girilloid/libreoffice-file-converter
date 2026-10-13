@@ -7,7 +7,13 @@ export const getTemporaryFilePath = (temporaryDir: string): string => {
   return join(temporaryDir, 'source');
 };
 
-export const getProcessedFilePath = (temporaryDirPath: string, inputPath: string, format: string): string => {
+type GetProcessedFilePathParams = {
+  readonly format: string;
+  readonly inputPath: string;
+  readonly temporaryDirPath: string;
+};
+
+export const getProcessedFilePath = ({ format, inputPath, temporaryDirPath }: GetProcessedFilePathParams): string => {
   const insideTemporaryDir = inputPath.startsWith(temporaryDirPath);
 
   if (insideTemporaryDir) {
@@ -19,6 +25,11 @@ export const getProcessedFilePath = (temporaryDirPath: string, inputPath: string
   return join(temporaryDirPath, `${inputFileName}.${format}`);
 };
 
-export const writeStream = (path: string, readStream: Readable): Promise<void> => {
+type WriteStreamParams = {
+  readonly path: string;
+  readonly readStream: Readable;
+};
+
+export const writeStream = ({ path, readStream }: WriteStreamParams): Promise<void> => {
   return pipeline(readStream, createWriteStream(path));
 };

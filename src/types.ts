@@ -49,12 +49,9 @@ export type LibreOfficeFileConverterOptions = {
  */
 export type InstallationDir = 'default' | 'dynamic' | (string & {});
 
-/**
- * Resolved installation (profile) directory with a cleanup handle when it was created temporarily.
- */
 export type ResolvedInstallationDir = {
-  cleanup?: () => Promise<void>;
-  path: string;
+  readonly cleanup?: () => Promise<void>;
+  readonly path: string;
 };
 
 /**
@@ -190,4 +187,29 @@ export type InitOptions = {
    * Array options concatenate.
    */
   readonly options?: LibreOfficeFileConverterOptions;
+};
+
+export type GetInstallationDirParams = {
+  readonly installationDir?: InstallationDir;
+  readonly options: LibreOfficeFileConverterOptions;
+};
+
+export type ProcessParams = {
+  readonly format: string;
+  readonly inputFilter?: string;
+  readonly inputPath: string;
+  readonly options: LibreOfficeFileConverterOptions;
+  readonly outputDir: string;
+  readonly outputFilter?: string;
+};
+
+export type ReadParams = {
+  readonly inputPath: string;
+  readonly options: ConvertOptions;
+  readonly temporaryDirPath: string;
+};
+
+export type WriteParams = {
+  readonly options: ConvertOptions;
+  readonly temporaryDirPath: string;
 };

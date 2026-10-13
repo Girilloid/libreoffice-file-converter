@@ -48,7 +48,10 @@ describe('helpers/child-process', () => {
     let exception: Error | null = null;
 
     try {
-      await execFileAsync(process.execPath, [scriptPath]);
+      await execFileAsync({
+        args: [scriptPath],
+        path: process.execPath,
+      });
     } catch (error) {
       exception = error as Error;
     }
@@ -64,7 +67,10 @@ describe('helpers/child-process', () => {
     let exception: Error | null = null;
 
     try {
-      await execFileAsync(process.execPath, [scriptPath]);
+      await execFileAsync({
+        args: [scriptPath],
+        path: process.execPath,
+      });
     } catch (error) {
       exception = error as Error;
     }
@@ -78,7 +84,10 @@ describe('helpers/child-process', () => {
     let exception: Error | null = null;
 
     try {
-      await execFileAsync(join(tmpDir.path, 'nonexistent-executable'), []);
+      await execFileAsync({
+        args: [],
+        path: join(tmpDir.path, 'nonexistent-executable'),
+      });
     } catch (error) {
       exception = error as Error;
     }

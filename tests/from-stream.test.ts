@@ -226,7 +226,10 @@ describe('LibreOfficeFileConverter convert from stream', () => {
             stream: inputStream,
           });
 
-          await writeStream(outputPath, outputStream);
+          await writeStream({
+            path: outputPath,
+            readStream: outputStream,
+          });
 
           const isExists = await access(outputPath);
 
@@ -277,7 +280,10 @@ describe('LibreOfficeFileConverter convert from stream', () => {
           stream: inputStream,
         });
 
-        await writeStream(outputPath, outputStream);
+        await writeStream({
+          path: outputPath,
+          readStream: outputStream,
+        });
 
         const isExists = await access(outputPath);
 

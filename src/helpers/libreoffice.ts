@@ -79,14 +79,23 @@ export const getLibreOfficeInitCommandArgs = (installationDir: string): readonly
   return args;
 };
 
-export const getLibreOfficeConvertCommandArgs = (
-  installationDir: string,
-  inputPath: string,
-  outputDir: string,
-  format: string,
-  inputFilter?: string,
-  outputFilter?: string,
-): readonly string[] => {
+type GetLibreOfficeConvertCommandArgsParams = {
+  readonly format: string;
+  readonly inputFilter?: string;
+  readonly inputPath: string;
+  readonly installationDir: string;
+  readonly outputDir: string;
+  readonly outputFilter?: string;
+};
+
+export const getLibreOfficeConvertCommandArgs = ({
+  format,
+  inputFilter,
+  inputPath,
+  installationDir,
+  outputDir,
+  outputFilter,
+}: GetLibreOfficeConvertCommandArgsParams): readonly string[] => {
   const filterSegment = outputFilter && outputFilter.length > 0 ? `:${outputFilter}` : '';
 
   const args: string[] = [];

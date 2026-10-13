@@ -17,12 +17,14 @@ type ExecutionError = Error & {
   stderr?: string | Buffer;
 };
 
-export const execFileAsync = async (
-  path: string,
-  args: readonly string[],
-  options?: ExecFileOptions,
-  debug?: boolean,
-): Promise<void> => {
+type ExecFileAsyncParams = {
+  readonly args: readonly string[];
+  readonly debug?: boolean;
+  readonly options?: ExecFileOptions;
+  readonly path: string;
+};
+
+export const execFileAsync = async ({ args, debug, options, path }: ExecFileAsyncParams): Promise<void> => {
   let startTime = 0;
 
   if (debug) {
