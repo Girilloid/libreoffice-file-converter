@@ -49,7 +49,7 @@ export class LibreOfficeFileConverter {
    * const libreOfficeFileConverter = new LibreOfficeFileConverter({ childProcessOptions: { timeout: 60 * 1000 } });
    * ```
    *
-   * @param options The LibreOfficeFileConverter options.
+   * @param options The LibreOfficeFileConverter options. Defaults for all `convert` and `init` calls.
    *
    * @constructor
    * @public
@@ -73,9 +73,11 @@ export class LibreOfficeFileConverter {
    * });
    * ```
    *
-   * @param options Convert options: input and output type, format, filter, converter options.
+   * @param options Convert options with `input: 'buffer'` and `output: 'buffer'`.
    *
    * @returns Buffer of the converted input.
+   *
+   * @throws When the soffice binary is not found, or LibreOffice reports an error.
    *
    * @overload
    * @public
@@ -96,7 +98,9 @@ export class LibreOfficeFileConverter {
    * });
    * ```
    *
-   * @param options Convert options: input and output type, format, filter, converter options.
+   * @param options Convert options with `output: 'file'`. Requires `outputPath`.
+   *
+   * @throws When the soffice binary is not found, or LibreOffice reports an error.
    *
    * @overload
    * @public
@@ -116,9 +120,11 @@ export class LibreOfficeFileConverter {
    * });
    * ```
    *
-   * @param options Convert options: input and output type, format, filter, converter options.
+   * @param options Convert options with `output: 'stream'`. Temporary files are removed after the returned stream closes.
    *
    * @returns Readable stream of the converted input.
+   *
+   * @throws When the soffice binary is not found, or LibreOffice reports an error.
    *
    * @overload
    * @public
@@ -138,9 +144,11 @@ export class LibreOfficeFileConverter {
    * });
    * ```
    *
-   * @param options Convert options: input and output type, format, filter, converter options.
+   * @param options Convert options.
    *
    * @returns Buffer, readable stream or void depending on the convert options.
+   *
+   * @throws When the soffice binary is not found, or LibreOffice reports an error.
    *
    * @public
    */
@@ -190,6 +198,8 @@ export class LibreOfficeFileConverter {
    * ```
    *
    * @param options Init options.
+   *
+   * @throws When the soffice binary is not found, or LibreOffice reports an error.
    *
    * @public
    */

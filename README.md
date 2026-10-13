@@ -6,6 +6,18 @@ Simple NodeJS wrapper for libreoffice CLI for converting office documents to dif
 
 Please install libreoffice in /Applications (Mac), with your favorite package manager (Linux), or with the msi (Windows).
 
+## Installation
+
+```bash
+npm install libreoffice-file-converter
+```
+
+For Deno, from JSR:
+
+```bash
+deno add jsr:@girilloid/libreoffice-file-converter
+```
+
 ## How to use
 
 ### Constructor
@@ -16,29 +28,33 @@ Please install libreoffice in /Applications (Mac), with your favorite package ma
 
 Array of paths to LibreOffice binary executables.
 
+Tried in order before the platform default paths.
+
 #### `options.childProcessOptions`
 
 `child_process.ExecFileOptions` object. Can be used to configure such things as timeout, etc.
 
 #### `options.debug`
 
-Enables debug output for LibreOffice command execution.
+Prints each soffice call (path, args, execution time, stdout, stderr) to stdout.
 
 #### `options.installationDir`
 
 User installation (profile) directory for LibreOffice.
 
 - `default` - Uses the default user installation directory.
-- `dynamic` - Creates a temporary user installation directory for each conversion process. Used by default.
+- `dynamic` - Creates a temporary user installation directory for each conversion process and removes it after. Used by default.
 - string - Specifies a custom path for the user installation directory.
 
 #### `options.tmpOptions`
 
 `tmp.DirOptions` object. Can be used to configure behavior of `tmp` package, which is used to create temporary folders for LibreOffice data.
 
+Applies to both temporary directories: the conversion directory and, with `dynamic` installationDir, the profile directory.
+
 ### `LibreOfficeFileConverter.convert`
 
-Converts provided file, `Buffer` or `Readable` stream to the request format.
+Converts provided file, `Buffer` or `Readable` stream to the requested format.
 
 #### `input`
 
@@ -76,7 +92,7 @@ Deprecated, use `outputFilter` instead.
 
 #### `options`
 
-Overrides for LibreOfficeFileConverter instance options.
+Merged with the LibreOfficeFileConverter instance options for this call. Array options concatenate.
 
 #### Examples
 
@@ -360,7 +376,7 @@ Path for the user installation directory.
 
 #### `options`
 
-Overrides for LibreOfficeFileConverter instance options.
+Merged with the LibreOfficeFileConverter instance options for this call. Array options concatenate.
 
 #### Examples
 
@@ -383,3 +399,11 @@ const run = async () => {
 
 run();
 ```
+
+### Errors
+
+`convert` and `init` throw when the `soffice` binary is not found, or when LibreOffice reports an error. The error message carries the LibreOffice stderr.
+
+## License
+
+MIT. See [LICENSE](./LICENSE).

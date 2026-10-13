@@ -9,7 +9,8 @@ import type { DirOptions } from 'tmp';
  */
 export type LibreOfficeFileConverterOptions = {
   /**
-   * List of paths to soffice binary.
+   * Paths to the soffice binary.
+   * Tried in order before the platform default paths.
    */
   readonly binaryPaths?: string[];
 
@@ -19,7 +20,7 @@ export type LibreOfficeFileConverterOptions = {
   readonly childProcessOptions?: ExecFileOptions;
 
   /**
-   * Enables debug logs on soffice calls.
+   * Prints each soffice call (path, args, execution time, stdout, stderr) to stdout.
    */
   readonly debug?: boolean;
 
@@ -33,7 +34,8 @@ export type LibreOfficeFileConverterOptions = {
   readonly installationDir?: InstallationDir;
 
   /**
-   * tmp-promise options.
+   * tmp-promise options for both temporary directories: the conversion directory and,
+   * with `dynamic` installationDir, the profile directory.
    */
   readonly tmpOptions?: DirOptions;
 };
@@ -157,7 +159,8 @@ export type ConvertOptionsInput = ConvertInputOptions & {
   readonly inputFilter?: string;
 
   /**
-   * LibreOfficeConverter options.
+   * Merged with the instance options for this call.
+   * Array options concatenate.
    */
   readonly options?: LibreOfficeFileConverterOptions;
 
@@ -183,7 +186,8 @@ export type InitOptions = {
   readonly installationDir: string;
 
   /**
-   * LibreOfficeConverter options.
+   * Merged with the instance options for this call.
+   * Array options concatenate.
    */
   readonly options?: LibreOfficeFileConverterOptions;
 };
