@@ -5,8 +5,5 @@
   "lock": { "frozen": true },
   "nodeModulesDir": "manual",
   "unstable": ["sloppy-imports"],
-  "allowScripts": [
-    "npm:fsevents@2.3.3",
-    "npm:unrs-resolver@1.12.2"
-  ]
+  "allowScripts": ["npm:fsevents@2.3.3", "npm:unrs-resolver@1.12.2"]
 }

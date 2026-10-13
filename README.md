@@ -52,6 +52,8 @@ Output type: `buffer` | `file` | `stream`.
 
 Requires `outputPath` field to be present when set to `file`.
 
+When set to `stream`, temporary files are removed after the returned stream is closed (fully read or destroyed).
+
 Defines return type: `Promise<Buffer>` | `Promise<void>` | `Promise<Readable>`.
 
 #### `format`
@@ -83,6 +85,7 @@ From `Buffer` to `Buffer`.
 ```ts
 import { readFile } from 'fs/promises';
 import { join } from 'path';
+
 import { LibreOfficeFileConverter } from 'libreoffice-file-converter';
 
 const inputPath = join(__dirname, './resources/example.doc');
@@ -100,8 +103,8 @@ const run = async () => {
     buffer: inputBuffer,
     format: 'pdf',
     input: 'buffer',
-    output: 'buffer'
-  })
+    output: 'buffer',
+  });
 };
 
 run();
@@ -112,6 +115,7 @@ From `Buffer` to file.
 ```ts
 import { readFile } from 'fs/promises';
 import { join } from 'path';
+
 import { LibreOfficeFileConverter } from 'libreoffice-file-converter';
 
 const inputPath = join(__dirname, './resources/example.doc');
@@ -130,9 +134,9 @@ const run = async () => {
     buffer: inputBuffer,
     format: 'pdf',
     input: 'buffer',
-    output: 'fille',
+    output: 'file',
     outputPath,
-  })
+  });
 };
 
 run();
@@ -143,6 +147,7 @@ From `Buffer` to `Readable` stream.
 ```ts
 import { readFile } from 'fs/promises';
 import { join } from 'path';
+
 import { LibreOfficeFileConverter } from 'libreoffice-file-converter';
 
 const inputPath = join(__dirname, './resources/example.doc');
@@ -161,7 +166,7 @@ const run = async () => {
     format: 'pdf',
     input: 'buffer',
     output: 'stream',
-  })
+  });
 };
 
 run();
@@ -172,6 +177,7 @@ From file to `Buffer`.
 ```ts
 import { readFile } from 'fs/promises';
 import { join } from 'path';
+
 import { LibreOfficeFileConverter } from 'libreoffice-file-converter';
 
 const inputPath = join(__dirname, './resources/example.doc');
@@ -188,7 +194,7 @@ const run = async () => {
     input: 'file',
     inputPath,
     output: 'buffer',
-  })
+  });
 };
 
 run();
@@ -199,6 +205,7 @@ From file to file.
 ```ts
 import { readFile } from 'fs/promises';
 import { join } from 'path';
+
 import { LibreOfficeFileConverter } from 'libreoffice-file-converter';
 
 const inputPath = join(__dirname, './resources/example.doc');
@@ -217,7 +224,7 @@ const run = async () => {
     inputPath,
     output: 'file',
     outputPath,
-  })
+  });
 };
 
 run();
@@ -228,6 +235,7 @@ From file to `Readable` stream.
 ```ts
 import { readFile } from 'fs/promises';
 import { join } from 'path';
+
 import { LibreOfficeFileConverter } from 'libreoffice-file-converter';
 
 const inputPath = join(__dirname, './resources/example.doc');
@@ -244,7 +252,7 @@ const run = async () => {
     input: 'file',
     inputPath,
     output: 'stream',
-  })
+  });
 };
 
 run();
@@ -255,6 +263,7 @@ From `Readable` stream to `Buffer`.
 ```ts
 import { createReadStream } from 'fs';
 import { join } from 'path';
+
 import { LibreOfficeFileConverter } from 'libreoffice-file-converter';
 
 const inputPath = join(__dirname, './resources/example.doc');
@@ -273,7 +282,7 @@ const run = async () => {
     input: 'stream',
     output: 'buffer',
     stream: inputStream,
-  })
+  });
 };
 
 run();
@@ -284,6 +293,7 @@ From `Readable` stream to file.
 ```ts
 import { createReadStream } from 'fs';
 import { join } from 'path';
+
 import { LibreOfficeFileConverter } from 'libreoffice-file-converter';
 
 const inputPath = join(__dirname, './resources/example.doc');
@@ -304,7 +314,7 @@ const run = async () => {
     output: 'file',
     outputPath,
     stream: inputStream,
-  })
+  });
 };
 
 run();
@@ -315,6 +325,7 @@ From `Readable` stream to `Readable` stream.
 ```ts
 import { createReadStream } from 'fs';
 import { join } from 'path';
+
 import { LibreOfficeFileConverter } from 'libreoffice-file-converter';
 
 const inputPath = join(__dirname, './resources/example.doc');
@@ -333,7 +344,7 @@ const run = async () => {
     input: 'stream',
     output: 'stream',
     stream: inputStream,
-  })
+  });
 };
 
 run();
@@ -355,6 +366,7 @@ Overrides for LibreOfficeFileConverter instance options.
 
 ```ts
 import { join } from 'path';
+
 import { LibreOfficeFileConverter } from 'libreoffice-file-converter';
 
 const installationDir = join(__dirname, './installation-dir');
@@ -366,7 +378,7 @@ const run = async () => {
     },
   });
 
-  await libreOfficeFileConverter.init({ installationDir })
+  await libreOfficeFileConverter.init({ installationDir });
 };
 
 run();

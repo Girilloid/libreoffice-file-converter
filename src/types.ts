@@ -48,6 +48,14 @@ export type LibreOfficeFileConverterOptions = {
 export type InstallationDir = 'default' | 'dynamic' | (string & {});
 
 /**
+ * Resolved installation (profile) directory with a cleanup handle when it was created temporarily.
+ */
+export type ResolvedInstallationDir = {
+  cleanup?: () => Promise<void>;
+  path: string;
+};
+
+/**
  * Convert input options.
  */
 export type ConvertInputOptions =

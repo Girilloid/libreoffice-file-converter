@@ -19,9 +19,9 @@
   },
   "scripts": {
     "build": "tsdown",
-    "format": "oxfmt \"./src/**/*.ts\" \"./tests/**/*.ts\" \"*.ts\"",
-    "lint": "oxlint \"src\"",
-    "lint:fix": "oxlint \"src\" --fix",
+    "format": "oxfmt",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
     "prepare": "husky",
     "release": "release-it",
     "release:preview": "release-it --dry-run",

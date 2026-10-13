@@ -20,7 +20,7 @@ export const getLibreOfficeExecutablePaths = (): readonly string[] => {
   return [];
 };
 
-export const getLibreOfficeExecutablePath = async (binaryPaths: readonly string[] = []): Promise<string> => {
+const resolveLibreOfficeExecutablePath = async (binaryPaths: readonly string[]): Promise<string> => {
   const paths = [...binaryPaths, ...getLibreOfficeExecutablePaths()];
 
   const existingPaths = await Promise.all(
@@ -42,6 +42,28 @@ export const getLibreOfficeExecutablePath = async (binaryPaths: readonly string[
   }
 
   return path;
+};
+
+const libreOfficeExecutablePathPromises = new Map<string, Promise<string>>();
+
+export const getLibreOfficeExecutablePath = (binaryPaths: readonly string[] = []): Promise<string> => {
+  const cacheKey = JSON.stringify(binaryPaths);
+
+  const cachedLibreOfficeExecutablePath = libreOfficeExecutablePathPromises.get(cacheKey);
+
+  if (cachedLibreOfficeExecutablePath) {
+    return cachedLibreOfficeExecutablePath;
+  }
+
+  const libreOfficeExecutablePathPromise = resolveLibreOfficeExecutablePath(binaryPaths);
+
+  libreOfficeExecutablePathPromises.set(cacheKey, libreOfficeExecutablePathPromise);
+
+  void libreOfficeExecutablePathPromise.catch(() => {
+    libreOfficeExecutablePathPromises.delete(cacheKey);
+  });
+
+  return libreOfficeExecutablePathPromise;
 };
 
 export const getLibreOfficeInitCommandArgs = (installationDir: string): readonly string[] => {

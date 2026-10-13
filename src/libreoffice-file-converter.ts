@@ -1,7 +1,7 @@
 import type { Buffer } from 'node:buffer';
 import { createReadStream } from 'node:fs';
 import { copyFile, readFile, writeFile } from 'node:fs/promises';
-import type { Readable } from 'node:stream';
+import { Readable } from 'node:stream';
 
 import { dir, setGracefulCleanup } from 'tmp-promise';
 
@@ -24,6 +24,7 @@ import type {
   InitOptions,
   InstallationDir,
   LibreOfficeFileConverterOptions,
+  ResolvedInstallationDir,
 } from './types';
 
 /**
@@ -144,7 +145,7 @@ export class LibreOfficeFileConverter {
    * @public
    */
   public async convert(options: ConvertOptions): Promise<Buffer | Readable | void> {
-    const { filter, format, inputFilter, options: callOptions = {}, outputFilter } = options;
+    const { filter, format, inputFilter, options: callOptions = {}, output, outputFilter } = options;
 
     const mergedOptions = this.mergeOptions(callOptions);
     const { tmpOptions } = mergedOptions;
@@ -155,11 +156,29 @@ export class LibreOfficeFileConverter {
       ...tmpOptions,
     });
 
-    const inputPath = await this.write(options, temporaryDir.path);
+    let isCleanupDeferred = false;
 
-    await this.process(inputPath, temporaryDir.path, format, inputFilter || filter, outputFilter, mergedOptions);
+    try {
+      const inputPath = await this.write(options, temporaryDir.path);
 
-    return this.read(options, temporaryDir.path, inputPath);
+      await this.process(inputPath, temporaryDir.path, format, inputFilter || filter, outputFilter, mergedOptions);
+
+      const result = await this.read(options, temporaryDir.path, inputPath);
+
+      if (output === 'stream' && result instanceof Readable) {
+        result.once('close', () => {
+          void temporaryDir.cleanup().catch(() => undefined);
+        });
+
+        isCleanupDeferred = true;
+      }
+
+      return result;
+    } finally {
+      if (!isCleanupDeferred) {
+        await temporaryDir.cleanup().catch(() => undefined);
+      }
+    }
   }
 
   /**
@@ -190,9 +209,9 @@ export class LibreOfficeFileConverter {
   private async getInstallationDir(
     installationDir: InstallationDir = 'dynamic',
     options: LibreOfficeFileConverterOptions = {},
-  ): Promise<string> {
+  ): Promise<ResolvedInstallationDir> {
     if (installationDir === 'default') {
-      return '';
+      return { path: '' };
     }
 
     if (installationDir === 'dynamic') {
@@ -204,10 +223,13 @@ export class LibreOfficeFileConverter {
         ...tmpOptions,
       });
 
-      return temporaryDir.path;
+      return {
+        cleanup: () => temporaryDir.cleanup(),
+        path: temporaryDir.path,
+      };
     }
 
-    return installationDir;
+    return { path: installationDir };
   }
 
   private mergeOptions(options: LibreOfficeFileConverterOptions = {}): LibreOfficeFileConverterOptions {
@@ -226,18 +248,25 @@ export class LibreOfficeFileConverter {
 
     const libreOfficeExecutablePath = await getLibreOfficeExecutablePath(binaryPaths);
 
-    const installationDir = await this.getInstallationDir(options.installationDir, options);
-
-    const libreOfficeCommandArgs = getLibreOfficeConvertCommandArgs(
-      installationDir,
-      inputPath,
-      outputDir,
-      format,
-      inputFilter,
-      outputFilter,
+    const { cleanup: installationDirCleanup, path: installationDir } = await this.getInstallationDir(
+      options.installationDir,
+      options,
     );
 
-    await execFileAsync(libreOfficeExecutablePath, libreOfficeCommandArgs, childProcessOptions, debug);
+    try {
+      const libreOfficeCommandArgs = getLibreOfficeConvertCommandArgs(
+        installationDir,
+        inputPath,
+        outputDir,
+        format,
+        inputFilter,
+        outputFilter,
+      );
+
+      await execFileAsync(libreOfficeExecutablePath, libreOfficeCommandArgs, childProcessOptions, debug);
+    } finally {
+      await installationDirCleanup?.().catch(() => undefined);
+    }
   }
 
   private async read(
