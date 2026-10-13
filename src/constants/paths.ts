@@ -3,9 +3,9 @@ import process from 'node:process';
 
 import { PROGRAM_FILES, PROGRAM_FILES_86 } from './env';
 
-export const DARWIN_PATHS = (): readonly string[] => ['/Applications/LibreOffice.app/Contents/MacOS/soffice'];
+export const DARWIN_PATHS: readonly string[] = ['/Applications/LibreOffice.app/Contents/MacOS/soffice'];
 
-export const LINUX_PATHS = (): readonly string[] => [
+export const LINUX_PATHS: readonly string[] = [
   '/usr/bin/libreoffice',
   '/usr/bin/soffice',
   '/snap/bin/libreoffice',

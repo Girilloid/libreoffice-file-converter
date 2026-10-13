@@ -107,6 +107,43 @@ describe('LibreOfficeFileConverter', () => {
     it('converts file with custom installation dir', async () => {
       await convert(installationDir);
     });
+
+    it('throws for unsupported input type', async (): Promise<void> => {
+      let exception: Error | null = null;
+
+      try {
+        await libreOfficeFileConverter.convert({
+          format: 'pdf',
+          input: 'type',
+          output: 'buffer',
+        } as never);
+      } catch (error) {
+        exception = error as Error;
+      }
+
+      assert.ok((exception?.message || '').includes('Unsupported input type: type'));
+    });
+
+    it('throws for unsupported output type', async (): Promise<void> => {
+      let exception: Error | null = null;
+
+      try {
+        const inputPath = getInputPath('example.doc');
+
+        const buffer = await readFile(inputPath);
+
+        await libreOfficeFileConverter.convert({
+          buffer,
+          format: 'pdf',
+          input: 'buffer',
+          output: 'type',
+        } as never);
+      } catch (error) {
+        exception = error as Error;
+      }
+
+      assert.ok((exception?.message || '').includes('Unsupported output type: type'));
+    });
   });
 
   describe('init', () => {

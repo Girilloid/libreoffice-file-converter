@@ -293,6 +293,8 @@ export class LibreOfficeFileConverter {
     if (output === 'stream') {
       return createReadStream(processedFilePath);
     }
+
+    throw new Error(`Unsupported output type: ${String(output)}`);
   }
 
   private async write(options: ConvertOptions, temporaryDirPath: string): Promise<string> {
@@ -322,6 +324,6 @@ export class LibreOfficeFileConverter {
       return temporaryFilePath;
     }
 
-    return temporaryFilePath;
+    throw new Error(`Unsupported input type: ${String(input)}`);
   }
 }

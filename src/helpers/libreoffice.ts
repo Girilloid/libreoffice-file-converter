@@ -7,11 +7,11 @@ import { DARWIN_PATHS, LINUX_PATHS, WIN32_PATHS } from '../constants';
 
 export const getLibreOfficeExecutablePaths = (): readonly string[] => {
   if (process.platform === 'darwin') {
-    return DARWIN_PATHS();
+    return DARWIN_PATHS;
   }
 
   if (process.platform === 'linux') {
-    return LINUX_PATHS();
+    return LINUX_PATHS;
   }
 
   if (process.platform === 'win32') {
@@ -36,7 +36,7 @@ const resolveLibreOfficeExecutablePath = async (binaryPaths: readonly string[]):
     }),
   );
 
-  const [path] = existingPaths.filter(Boolean);
+  const path = existingPaths.find((candidate): candidate is string => typeof candidate === 'string');
 
   if (!path) {
     throw new Error('Could not find soffice binary');
@@ -107,5 +107,5 @@ export const getLibreOfficeConvertCommandArgs = (
 };
 
 export const hasLibreOfficeError = (stderr: string): boolean => {
-  return stderr?.toLowerCase()?.includes('error:');
+  return stderr.toLowerCase().includes('error:');
 };

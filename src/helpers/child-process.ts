@@ -6,12 +6,8 @@ import { inspect, promisify } from 'node:util';
 
 import { hasLibreOfficeError } from './libreoffice';
 
-const isBuffer = (value: unknown): value is Buffer => {
-  return Buffer.isBuffer(value);
-};
-
 const processOutputToString = (processOutput: string | Buffer): string => {
-  return isBuffer(processOutput) ? processOutput.toString('utf-8') : processOutput;
+  return Buffer.isBuffer(processOutput) ? processOutput.toString('utf-8') : processOutput;
 };
 
 const execFilePromise = promisify(execFile);
