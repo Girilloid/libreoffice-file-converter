@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { rm, writeFile } from 'node:fs/promises';
+import { chmod, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { after, before, describe, it } from 'node:test';
 
@@ -18,6 +18,7 @@ describe('helpers/libreoffice', () => {
     executablePath = join(tmpDir.path, 'soffice');
 
     await writeFile(executablePath, '');
+    await chmod(executablePath, 0o755);
   });
 
   after(async () => {
@@ -36,5 +37,23 @@ describe('helpers/libreoffice', () => {
     const result = await getLibreOfficeExecutablePath([executablePath]);
 
     assert.equal(result, executablePath);
+  });
+
+  it('skips non-executable binary path', async (): Promise<void> => {
+    const staticPath = join(tmpDir.path, 'soffice-static');
+
+    await writeFile(staticPath, '');
+
+    let exception;
+
+    try {
+      const result = await getLibreOfficeExecutablePath([staticPath]);
+
+      assert.ok(result !== staticPath);
+    } catch (error) {
+      exception = error;
+    }
+
+    assert.equal(exception, undefined);
   });
 });

@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "isolatedModules": true,
-    "lib": ["ES2020", "ESNext.AsyncIterable"],
+    "lib": ["ES2022", "ESNext.AsyncIterable"],
     "module": "esnext",
     "moduleResolution": "bundler",
     "noUnusedLocals": true,

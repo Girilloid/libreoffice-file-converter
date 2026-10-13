@@ -1,3 +1,4 @@
+import { constants } from 'node:fs';
 import { access } from 'node:fs/promises';
 import process from 'node:process';
 import { pathToFileURL } from 'node:url';
@@ -26,7 +27,7 @@ const resolveLibreOfficeExecutablePath = async (binaryPaths: readonly string[]):
   const existingPaths = await Promise.all(
     paths.map(async (path) => {
       try {
-        await access(path);
+        await access(path, constants.X_OK);
       } catch {
         return false;
       }

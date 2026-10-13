@@ -38,7 +38,7 @@ export const execFileAsync = async (
   let stderr: string | Buffer = '';
 
   try {
-    ({ stdout, stderr } = await execFilePromise(path, args, options));
+    ({ stdout, stderr } = await execFilePromise(path, args, options || {}));
   } catch (error) {
     executionError = error as ExecutionError;
     stdout = executionError.stdout || '';
@@ -67,6 +67,8 @@ export const execFileAsync = async (
   }
 
   if (executionError || hasLibreOfficeError(stderrString)) {
-    throw executionError || new Error(stderrString);
+    throw new Error(stderrString || executionError?.message, {
+      cause: executionError,
+    });
   }
 };
