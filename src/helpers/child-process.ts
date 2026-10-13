@@ -2,7 +2,7 @@ import { Buffer } from 'node:buffer';
 import { execFile } from 'node:child_process';
 import type { ExecFileOptions } from 'node:child_process';
 import process from 'node:process';
-import { inspect } from 'node:util';
+import { inspect, promisify } from 'node:util';
 
 import { hasLibreOfficeError } from './libreoffice';
 
@@ -14,48 +14,59 @@ const processOutputToString = (processOutput: string | Buffer): string => {
   return isBuffer(processOutput) ? processOutput.toString('utf-8') : processOutput;
 };
 
-export const execFileAsync = (
+const execFilePromise = promisify(execFile);
+
+type ExecutionError = Error & {
+  stdout?: string | Buffer;
+  stderr?: string | Buffer;
+};
+
+export const execFileAsync = async (
   path: string,
   args: readonly string[],
   options?: ExecFileOptions,
   debug?: boolean,
 ): Promise<void> => {
-  let startTime: number;
+  let startTime = 0;
 
   if (debug) {
     startTime = performance.now();
   }
 
-  return new Promise((resolve, reject) => {
-    execFile(path, args, options, (error, stdout, stderr) => {
-      const stderrString = processOutputToString(stderr);
-      const stdoutString = processOutputToString(stdout);
+  let executionError: ExecutionError | undefined;
+  let stdout: string | Buffer = '';
+  let stderr: string | Buffer = '';
 
-      if (debug) {
-        const debugInfo = inspect(
-          {
-            args,
-            executionTime: performance.now() - startTime,
-            path,
-            stderr: stderrString,
-            stdout: stdoutString,
-          },
-          {
-            colors: true,
-            sorted: true,
-          },
-        );
+  try {
+    ({ stdout, stderr } = await execFilePromise(path, args, options));
+  } catch (error) {
+    executionError = error as ExecutionError;
+    stdout = executionError.stdout || '';
+    stderr = executionError.stderr || '';
+  }
 
-        process.stdout.write(`LibreOffice debug output:\n${debugInfo}\n`);
-      }
+  const stdoutString = processOutputToString(stdout);
+  const stderrString = processOutputToString(stderr);
 
-      const libreOfficeError = hasLibreOfficeError(stderrString);
+  if (debug) {
+    const debugInfo = inspect(
+      {
+        args,
+        executionTime: performance.now() - startTime,
+        path,
+        stderr: stderrString,
+        stdout: stdoutString,
+      },
+      {
+        colors: true,
+        sorted: true,
+      },
+    );
 
-      if (error || libreOfficeError) {
-        return reject(error || new Error(stderrString));
-      }
+    process.stdout.write(`LibreOffice debug output:\n${debugInfo}\n`);
+  }
 
-      return resolve();
-    });
-  });
+  if (executionError || hasLibreOfficeError(stderrString)) {
+    throw executionError || new Error(stderrString);
+  }
 };

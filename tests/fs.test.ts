@@ -40,5 +40,13 @@ describe('helpers/fs', () => {
 
       assert.equal(result, ['tmp', 'libreoffice-file-converter', 'source.pdf'].join(sep));
     });
+
+    it('returns correct file path for dotfile outside temporary dir', () => {
+      const inputPath = ['home', 'user', '.source'].join(sep);
+
+      const result = getProcessedFilePath(temporaryDirPath, inputPath, format);
+
+      assert.equal(result, ['tmp', 'libreoffice-file-converter', '.source.pdf'].join(sep));
+    });
   });
 });

@@ -1,6 +1,6 @@
 import type { Buffer } from 'node:buffer';
 import { createReadStream } from 'node:fs';
-import { readFile, writeFile } from 'node:fs/promises';
+import { copyFile, readFile, writeFile } from 'node:fs/promises';
 import type { Readable } from 'node:stream';
 
 import { dir, setGracefulCleanup } from 'tmp-promise';
@@ -256,9 +256,9 @@ export class LibreOfficeFileConverter {
     if (output === 'file') {
       const { outputPath } = options;
 
-      const stream = createReadStream(processedFilePath);
+      await copyFile(processedFilePath, outputPath);
 
-      return writeStream(outputPath, stream);
+      return;
     }
 
     if (output === 'stream') {
