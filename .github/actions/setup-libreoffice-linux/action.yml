@@ -4,9 +4,60 @@ description: Setups LibreOffice on Linux
 runs:
   using: composite
   steps:
-    - name: Install LibreOffice
-      run: sudo add-apt-repository --yes ppa:libreoffice && sudo apt update && sudo apt install libreoffice -y
+    - name: Add LibreOffice PPA
+      run: sudo add-apt-repository --yes ppa:libreoffice && sudo apt-get update
       shell: bash
+
+    - name: Resolve LibreOffice version
+      id: version
+      run: |
+        candidate="$(apt-cache policy libreoffice | sed -n 's/^[[:space:]]*Candidate:[[:space:]]*//p')"
+
+        if [ -z "$candidate" ] || [ "$candidate" = "(none)" ]; then
+          echo "::error::apt-cache reported no candidate for libreoffice"
+
+          exit 1
+        fi
+
+        echo "key=libreoffice-debs-${{ runner.os }}-${{ runner.arch }}-$(lsb_release -cs)-$candidate" >> "$GITHUB_OUTPUT"
+      shell: bash
+
+    - name: Restore LibreOffice deb cache
+      id: debs
+      uses: actions/cache/restore@v6
+      with:
+        path: ~/.cache/libreoffice-debs
+        key: ${{ steps.version.outputs.key }}
+
+    - name: Seed apt archive cache
+      if: steps.debs.outputs.cache-hit == 'true'
+      run: |
+        shopt -s nullglob
+        debs=("$HOME"/.cache/libreoffice-debs/*.deb)
+
+        if [ ${#debs[@]} -gt 0 ]; then
+          sudo mkdir -p /var/cache/apt/archives/partial
+          sudo cp "${debs[@]}" /var/cache/apt/archives/
+        fi
+      shell: bash
+
+    - name: Install LibreOffice
+      run: sudo rm -f /etc/apt/apt.conf.d/docker-clean && sudo apt-get install --yes libreoffice
+      shell: bash
+
+    - name: Collect downloaded debs
+      if: steps.debs.outputs.cache-hit != 'true'
+      run: |
+        mkdir -p "$HOME/.cache/libreoffice-debs"
+        find /var/cache/apt/archives -maxdepth 1 -name '*.deb' -exec cp {} "$HOME/.cache/libreoffice-debs/" \;
+      shell: bash
+
+    - name: Save LibreOffice debs to cache
+      if: steps.debs.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v6
+      with:
+        path: ~/.cache/libreoffice-debs
+        key: ${{ steps.version.outputs.key }}
 
     - name: Print LibreOffice version
       run: soffice --version

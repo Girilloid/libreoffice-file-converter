@@ -7,10 +7,41 @@ runs:
     - name: Setup Homebrew
       uses: Homebrew/actions/setup-homebrew@main
 
-    - name: Install LibreOffice
-      run: brew install --cask libreoffice
+    - name: Resolve LibreOffice version
+      id: version
+      run: |
+        version="$(brew info --cask --json=v2 libreoffice | jq -r '.casks[0].version' | tr ',' '-')"
+
+        if [ -z "$version" ] || [ "$version" = "null" ]; then
+          echo "::error::brew info returned no version for the libreoffice cask"
+
+          exit 1
+        fi
+
+        echo "key=libreoffice-app-${{ runner.os }}-${{ runner.arch }}-$version" >> "$GITHUB_OUTPUT"
       shell: bash
 
+    - name: Restore LibreOffice app cache
+      id: app
+      uses: actions/cache/restore@v6
+      with:
+        path: /Applications/LibreOffice.app
+        key: ${{ steps.version.outputs.key }}
+
+    - name: Install LibreOffice
+      if: steps.app.outputs.cache-hit != 'true'
+      run: brew install --cask libreoffice
+      env:
+        HOMEBREW_NO_AUTO_UPDATE: 1
+      shell: bash
+
+    - name: Save LibreOffice app to cache
+      if: steps.app.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v6
+      with:
+        path: /Applications/LibreOffice.app
+        key: ${{ steps.version.outputs.key }}
+
     - name: Print LibreOffice version
-      run: soffice --version
+      run: /Applications/LibreOffice.app/Contents/MacOS/soffice --version
       shell: bash

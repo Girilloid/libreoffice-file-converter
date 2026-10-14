@@ -4,10 +4,40 @@ description: Setups LibreOffice on Windows
 runs:
   using: composite
   steps:
+    - name: Resolve LibreOffice version
+      id: version
+      shell: pwsh
+      run: |
+        $wingetOutput = winget show --id TheDocumentFoundation.LibreOffice -e --accept-source-agreements --disable-interactivity
+        $version = [regex]::Match(($wingetOutput | Out-String), '(?m)^Version:\s+(\S+)').Groups[1].Value
+
+        if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($version)) {
+          Write-Error "Failed to resolve LibreOffice version via winget (exit=$LASTEXITCODE, version='$version')"
+
+          exit 1
+        }
+
+        "key=libreoffice-app-${{ runner.os }}-${{ runner.arch }}-$version" >> $env:GITHUB_OUTPUT
+
+    - name: Restore LibreOffice app cache
+      id: app
+      uses: actions/cache/restore@v6
+      with:
+        path: C:\Program Files\LibreOffice
+        key: ${{ steps.version.outputs.key }}
+
     - name: Install LibreOffice
+      if: steps.app.outputs.cache-hit != 'true'
       run: winget install --id=TheDocumentFoundation.LibreOffice -e --accept-package-agreements --accept-source-agreements
       shell: pwsh
 
+    - name: Save LibreOffice app to cache
+      if: steps.app.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v6
+      with:
+        path: C:\Program Files\LibreOffice
+        key: ${{ steps.version.outputs.key }}
+
     - name: Print LibreOffice version
-      run: '"C:\\Program Files\\LibreOffice\\program\\soffice.exe --version"'
+      run: '& "C:\Program Files\LibreOffice\program\soffice.exe" --version'
       shell: pwsh
