@@ -137,6 +137,12 @@ export type ConvertOutputOptions = ConvertOutputOptionsBuffer | ConvertOutputOpt
  */
 export type ConvertOptionsInput = ConvertInputOptions & {
   /**
+   * LibreOffice `--convert-images-to` value. Target filter for all images written to the output format.
+   * See LibreOffice [docs](https://help.libreoffice.org/latest/en-US/text/shared/guide/start_parameters.html)
+   */
+  readonly convertImagesTo?: string;
+
+  /**
    * LibreOffice output filter.
    * See LibreOffice [docs](https://help.libreoffice.org/latest/en-US/text/shared/guide/convertfilters.html)
    *
@@ -156,6 +162,12 @@ export type ConvertOptionsInput = ConvertInputOptions & {
   readonly inputFilter?: string;
 
   /**
+   * LibreOffice input filter options, the `--infilter` FilterParams segment. Requires `inputFilter`.
+   * See LibreOffice [docs](https://help.libreoffice.org/latest/en-US/text/shared/guide/convertfilters.html)
+   */
+  readonly inputFilterOptions?: string;
+
+  /**
    * Merged with the instance options for this call.
    * Array options concatenate.
    */
@@ -166,6 +178,13 @@ export type ConvertOptionsInput = ConvertInputOptions & {
    * See LibreOffice [docs](https://help.libreoffice.org/latest/en-US/text/shared/guide/convertfilters.html)
    */
   readonly outputFilter?: string;
+
+  /**
+   * LibreOffice output filter options, the third `--convert-to` segment.
+   * An object is JSON-stringified; a string is passed as is. Requires `outputFilter`.
+   * See LibreOffice [docs](https://help.libreoffice.org/latest/en-US/text/shared/guide/pdf_params.html)
+   */
+  readonly outputFilterOptions?: string | Record<string, unknown>;
 };
 
 /**
@@ -195,12 +214,15 @@ export type GetInstallationDirParams = {
 };
 
 export type ProcessParams = {
+  readonly convertImagesTo?: string;
   readonly format: string;
   readonly inputFilter?: string;
+  readonly inputFilterOptions?: string;
   readonly inputPath: string;
   readonly options: LibreOfficeFileConverterOptions;
   readonly outputDir: string;
   readonly outputFilter?: string;
+  readonly outputFilterOptions?: string | Record<string, unknown>;
 };
 
 export type ReadParams = {

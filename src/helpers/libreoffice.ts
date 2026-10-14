@@ -74,29 +74,43 @@ export const getLibreOfficeInitCommandArgs = (installationDir: string): readonly
     args.push(`-env:UserInstallation=${pathToFileURL(installationDir).toString()}`);
   }
 
-  args.push('--headless', '--terminate_after_init');
+  args.push('--headless', '--norestore', '--nolockcheck', '--terminate_after_init');
 
   return args;
 };
 
+const toFilterSegment = (value?: string): string => {
+  return value && value.length > 0 ? `:${value}` : '';
+};
+
 type GetLibreOfficeConvertCommandArgsParams = {
+  readonly convertImagesTo?: string;
   readonly format: string;
   readonly inputFilter?: string;
+  readonly inputFilterOptions?: string;
   readonly inputPath: string;
   readonly installationDir: string;
   readonly outputDir: string;
   readonly outputFilter?: string;
+  readonly outputFilterOptions?: string | Record<string, unknown>;
 };
 
 export const getLibreOfficeConvertCommandArgs = ({
+  convertImagesTo,
   format,
   inputFilter,
+  inputFilterOptions,
   inputPath,
   installationDir,
   outputDir,
   outputFilter,
+  outputFilterOptions,
 }: GetLibreOfficeConvertCommandArgsParams): readonly string[] => {
-  const filterSegment = outputFilter && outputFilter.length > 0 ? `:${outputFilter}` : '';
+  const inputFilterSegment = toFilterSegment(inputFilterOptions);
+  const outputFilterSegment = toFilterSegment(outputFilter);
+  const outputFilterOptionsSegment = toFilterSegment(
+    typeof outputFilterOptions === 'string' ? outputFilterOptions : JSON.stringify(outputFilterOptions),
+  );
 
   const args: string[] = [];
 
@@ -104,13 +118,19 @@ export const getLibreOfficeConvertCommandArgs = ({
     args.push(`-env:UserInstallation=${pathToFileURL(installationDir).toString()}`);
   }
 
-  args.push('--headless');
+  args.push('--headless', '--norestore', '--nolockcheck');
 
-  if (inputFilter && inputFilter.length > 0) {
-    args.push(`--infilter=${inputFilter}`);
+  if (inputFilter) {
+    args.push(`--infilter=${inputFilter}${inputFilterSegment}`);
   }
 
-  args.push('--convert-to', `${format}${filterSegment}`, '--outdir', outputDir, inputPath);
+  args.push('--convert-to', `${format}${outputFilterSegment}${outputFilterOptionsSegment}`, '--outdir', outputDir);
+
+  if (convertImagesTo) {
+    args.push('--convert-images-to', convertImagesTo);
+  }
+
+  args.push(inputPath);
 
   return args;
 };

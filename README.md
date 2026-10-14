@@ -76,13 +76,27 @@ Defines return type: `Promise<Buffer>` | `Promise<void>` | `Promise<Readable>`.
 
 Conversion format.
 
+#### `convertImagesTo`
+
+LibreOffice `--convert-images-to` value. Target filter for all images written to the output format, for example `jpg` when converting to `html`. See LibreOffice [docs](https://help.libreoffice.org/latest/en-US/text/shared/guide/start_parameters.html).
+
 #### `inputFilter`
 
 LibreOffice input filter, see [docs](https://help.libreoffice.org/latest/en-US/text/shared/guide/convertfilters.html).
 
+Accepts filter options as is, for example `Text - txt - csv (StarCalc):44,34,76,1`.
+
+#### `inputFilterOptions`
+
+LibreOffice input filter options, the `--infilter` FilterParams segment, see [docs](https://help.libreoffice.org/latest/en-US/text/shared/guide/convertfilters.html). Requires `inputFilter`, for example `44,34,76,1` with `Text - txt - csv (StarCalc)`.
+
 #### `outputFilter`
 
 LibreOffice output filter, see [docs](https://help.libreoffice.org/latest/en-US/text/shared/guide/convertfilters.html).
+
+#### `outputFilterOptions`
+
+LibreOffice output filter options, the third `--convert-to` segment. Requires `outputFilter`. An object is JSON-stringified, a string is passed as is. For PDF/A-2b: `{ SelectPdfVersion: { type: 'long', value: '2' } }`. See LibreOffice [docs](https://help.libreoffice.org/latest/en-US/text/shared/guide/pdf_params.html).
 
 #### `filter`
 

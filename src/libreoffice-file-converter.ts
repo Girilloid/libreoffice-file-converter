@@ -156,7 +156,17 @@ export class LibreOfficeFileConverter {
    * @public
    */
   public async convert(options: ConvertOptions): Promise<Buffer | Readable | void> {
-    const { filter, format, inputFilter, options: callOptions = {}, output, outputFilter } = options;
+    const {
+      convertImagesTo,
+      filter,
+      format,
+      inputFilter,
+      inputFilterOptions,
+      options: callOptions = {},
+      output,
+      outputFilter,
+      outputFilterOptions,
+    } = options;
 
     const mergedOptions = this.mergeOptions(callOptions);
     const { tmpOptions } = mergedOptions;
@@ -176,12 +186,15 @@ export class LibreOfficeFileConverter {
       });
 
       await this.process({
+        convertImagesTo,
         format,
         inputFilter: inputFilter || filter,
+        inputFilterOptions,
         inputPath,
         options: mergedOptions,
         outputDir: temporaryDir.path,
         outputFilter,
+        outputFilterOptions,
       });
 
       const result = await this.read({
@@ -269,12 +282,15 @@ export class LibreOfficeFileConverter {
   }
 
   private async process({
+    convertImagesTo,
     format,
     inputFilter,
+    inputFilterOptions,
     inputPath,
     options,
     outputDir,
     outputFilter,
+    outputFilterOptions,
   }: ProcessParams): Promise<void> {
     const { binaryPaths, childProcessOptions, debug } = options;
 
@@ -287,12 +303,15 @@ export class LibreOfficeFileConverter {
 
     try {
       const libreOfficeCommandArgs = getLibreOfficeConvertCommandArgs({
+        convertImagesTo,
         format,
         inputFilter,
+        inputFilterOptions,
         inputPath,
         installationDir,
         outputDir,
         outputFilter,
+        outputFilterOptions,
       });
 
       await execFileAsync({

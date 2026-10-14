@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { Buffer } from 'node:buffer';
 import { createWriteStream } from 'node:fs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { pipeline } from 'node:stream/promises';
@@ -10,7 +11,7 @@ import { dir } from 'tmp-promise';
 import type { DirectoryResult } from 'tmp-promise';
 
 import { LibreOfficeFileConverter } from '../src/libreoffice-file-converter';
-import type { InstallationDir } from '../src/types';
+import type { ConvertOptions, InstallationDir } from '../src/types';
 import { access, clearDir, getFilesCount, getInputPath, getOutputPathFactory, timeout } from './helpers';
 
 const getInstallationDirPath = getOutputPathFactory('installation-dir');
@@ -67,21 +68,33 @@ describe('LibreOfficeFileConverter', () => {
     const inputFileName = 'example.doc';
     const outputFileName = 'example-doc.pdf';
 
-    const convert = async (installationDir: InstallationDir) => {
+    const convert = async (
+      installationDir: InstallationDir,
+      convertOptions: Partial<
+        Pick<
+          ConvertOptions,
+          'convertImagesTo' | 'format' | 'inputFilter' | 'inputFilterOptions' | 'outputFilter' | 'outputFilterOptions'
+        >
+      > = {},
+      inputBuffer?: Buffer,
+    ) => {
       let exception;
+
+      let outputBuffer: Buffer | undefined;
 
       try {
         const inputPath = getInputPath(inputFileName);
         const outputPath = getOutputPath(outputFileName);
 
-        const buffer = await readFile(inputPath);
+        const buffer = inputBuffer || (await readFile(inputPath));
 
-        const outputBuffer = await libreOfficeFileConverter.convert({
+        outputBuffer = await libreOfficeFileConverter.convert({
           buffer,
           format: 'pdf',
           input: 'buffer',
           options: { installationDir },
           output: 'buffer',
+          ...convertOptions,
         });
 
         await writeFile(outputPath, outputBuffer);
@@ -94,6 +107,8 @@ describe('LibreOfficeFileConverter', () => {
       }
 
       assert.equal(exception, undefined);
+
+      return outputBuffer;
     };
 
     it('converts file with default installation dir', async () => {
@@ -106,6 +121,44 @@ describe('LibreOfficeFileConverter', () => {
 
     it('converts file with custom installation dir', async () => {
       await convert(installationDir);
+    });
+
+    it('converts with string output filter options', async (): Promise<void> => {
+      const outputBuffer = await convert('dynamic', {
+        format: 'txt',
+        outputFilter: 'Text (encoded)',
+        outputFilterOptions: 'UTF8',
+      });
+
+      assert.ok(outputBuffer !== undefined && outputBuffer.toString('utf-8').trim().length > 0);
+    });
+
+    it('converts with object output filter options', async (): Promise<void> => {
+      const outputBuffer = await convert('dynamic', {
+        outputFilter: 'writer_pdf_Export',
+        outputFilterOptions: {
+          SelectPdfVersion: {
+            type: 'long',
+            value: '2',
+          },
+        },
+      });
+
+      assert.ok(outputBuffer !== undefined && outputBuffer.toString('latin1').includes('pdfaid:part'));
+    });
+
+    it('converts with input filter options', async (): Promise<void> => {
+      const outputBuffer = await convert(
+        'dynamic',
+        {
+          format: 'ods',
+          inputFilter: 'Text - txt - csv (StarCalc)',
+          inputFilterOptions: '44,34,76,1',
+        },
+        Buffer.from('A,B,C\n1,2,3\n4,5,6', 'utf-8'),
+      );
+
+      assert.ok(outputBuffer !== undefined && outputBuffer.length > 0);
     });
 
     it('throws for unsupported input type', async (): Promise<void> => {
