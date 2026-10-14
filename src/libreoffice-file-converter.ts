@@ -188,12 +188,12 @@ export class LibreOfficeFileConverter {
       await this.process({
         convertImagesTo,
         format,
-        inputFilter: inputFilter || filter,
+        inputFilter,
         inputFilterOptions,
         inputPath,
         options: mergedOptions,
         outputDir: temporaryDir.path,
-        outputFilter,
+        outputFilter: outputFilter || filter,
         outputFilterOptions,
       });
 
