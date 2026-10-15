@@ -1,7 +1,9 @@
 import assert from 'node:assert/strict';
 import { chmod, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import process from 'node:process';
 import { after, before, describe, it } from 'node:test';
+import { pathToFileURL } from 'node:url';
 
 import { dir } from 'tmp-promise';
 import type { DirectoryResult } from 'tmp-promise';
@@ -43,7 +45,7 @@ describe('helpers/libreoffice', () => {
     assert.equal(result, executablePath);
   });
 
-  it('skips non-executable binary path', async (): Promise<void> => {
+  it('skips non-executable binary path', { skip: process.platform === 'win32' }, async (): Promise<void> => {
     const staticPath = join(tmpDir.path, 'soffice-static');
 
     await writeFile(staticPath, '');
@@ -63,10 +65,12 @@ describe('helpers/libreoffice', () => {
 
   describe('getLibreOfficeInitCommandArgs', () => {
     it('builds init args with installation dir', () => {
-      const args = getLibreOfficeInitCommandArgs('/installation');
+      const installationDir = '/installation';
+
+      const args = getLibreOfficeInitCommandArgs(installationDir);
 
       assert.deepEqual(args, [
-        '-env:UserInstallation=file:///installation',
+        `-env:UserInstallation=${pathToFileURL(installationDir).toString()}`,
         '--headless',
         '--norestore',
         '--nolockcheck',
