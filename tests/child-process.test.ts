@@ -92,8 +92,11 @@ describe('helpers/child-process', () => {
       exception = error as Error;
     }
 
+    const cause = getErrorCause(exception) as (Error & { code?: string }) | undefined;
+
     assert.ok(exception);
-    assert.ok(exception.message.includes('ENOENT'));
-    assert.ok(getErrorCause(exception) instanceof Error);
+    assert.ok(exception.message.length > 0);
+    assert.ok(cause instanceof Error);
+    assert.ok(cause.code === 'ENOENT' || cause.message.includes('ENOENT'));
   });
 });

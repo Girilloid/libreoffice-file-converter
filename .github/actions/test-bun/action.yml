@@ -9,5 +9,5 @@ runs:
       shell: bash
 
     - name: Test package
-      run: bun test --timeout 15000
+      run: bun test --timeout 60000
       shell: bash

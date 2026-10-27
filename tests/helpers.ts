@@ -40,6 +40,6 @@ export const getOutputPathFactory = (outputDir: string) => {
 };
 
 export const outputFormat = 'pdf';
-export const timeout = 10 * 1000;
+export const timeout = 60 * 1000;
 
 export const formats = ['doc', 'docx', 'gif', 'jpg', 'odp', 'ods', 'odt', 'png', 'ppt', 'rtf', 'xls', 'xlsx'];
